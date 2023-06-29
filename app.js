@@ -6,7 +6,6 @@ import pdfKit from 'pdfkit';
 const app = express();
 const port = 3000;
 
-
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './views');
@@ -27,14 +26,11 @@ app.post('/gerarPDF', (req, res) => {
     
     const doc = new pdfKit();
 
-    // Define o cabeçalho HTTP para o PDF
-    res.setHeader('Content-Disposition', 'attachment; filename="example.pdf"');
+    //res.setHeader('Content-Disposition', 'attachment; filename="example.pdf"');
     res.setHeader('Content-Type', 'application/pdf');
 
-    // Pipe o PDF para a resposta
     doc.pipe(res);
 
-    // Adiciona o conteúdo do formulário ao PDF
     doc.font('Helvetica');
     doc.fontSize(24).text('Informações do Formulário:', { align: 'center' });
     doc.fontSize(14).text(`Nome: ${name}`);
@@ -42,7 +38,6 @@ app.post('/gerarPDF', (req, res) => {
     doc.fontSize(14).text(`Telefone: ${telefone}`);
     doc.fontSize(14).text(`Observação: ${observacao}`);
 
-    // Finaliza o PDF e encerra a resposta
     doc.end();
 
   });
