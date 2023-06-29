@@ -1,0 +1,1 @@
+VMasker(document.querySelector("#telefone")).maskPattern("(99) 9999-9999");
