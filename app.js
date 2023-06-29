@@ -1,9 +1,7 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
-import fs from 'fs';
 import bodyParser from 'body-parser';
 import pdfKit from 'pdfkit';
-import Swal from 'sweetalert2';
 
 const app = express();
 const port = 3000;
@@ -17,7 +15,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-
 app.get('/', (req, res) => {
     res.render('home');
 });
@@ -25,6 +22,8 @@ app.get('/', (req, res) => {
 app.post('/gerarPDF', (req, res) => {
     const email = req.body.email;
     const name = req.body.nome;
+    const telefone = req.body.telefone;
+    const observacao = req.body.observacao;
     
     const doc = new pdfKit();
 
@@ -32,28 +31,23 @@ app.post('/gerarPDF', (req, res) => {
     res.setHeader('Content-Disposition', 'attachment; filename="example.pdf"');
     res.setHeader('Content-Type', 'application/pdf');
 
-   // Pipe o PDF para a resposta
+    // Pipe o PDF para a resposta
     doc.pipe(res);
 
-  // Adiciona o conteúdo do formulário ao PDF
+    // Adiciona o conteúdo do formulário ao PDF
     doc.font('Helvetica');
     doc.fontSize(24).text('Informações do Formulário:', { align: 'center' });
     doc.fontSize(14).text(`Nome: ${name}`);
     doc.fontSize(14).text(`E-mail: ${email}`);
+    doc.fontSize(14).text(`Telefone: ${telefone}`);
+    doc.fontSize(14).text(`Observação: ${observacao}`);
 
-  // Finaliza o PDF e encerra a resposta
+    // Finaliza o PDF e encerra a resposta
     doc.end();
 
-    Swal.fire(
-        'The Internet?',
-        'That thing is still around?',
-        'success'
-    )
-
-});
+  });
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
-
 });
 
