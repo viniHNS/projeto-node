@@ -19,11 +19,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/gerarPDF', (req, res) => {
-    const email = req.body.email;
-    const name = req.body.nome;
-    const telefone = req.body.telefone;
-    const observacao = req.body.observacao;
-    const sexo = req.body.sexo;
+    let email = req.body.email;
+    let name = req.body.nome;
+    let telefone = req.body.telefone;
+    let observacao = req.body.observacao;
+    let sexo = req.body.sexo;
     if(sexo == "" || sexo == undefined){
         sexo = "Não informado";
     }
