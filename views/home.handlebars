@@ -1,7 +1,8 @@
 <div class="container">
     <form action="/gerarPDF" method="post">
         <div class="input-nome">
-            <label for="nome" id="label-nome">Nome</label>
+            <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
+            
             <input type="text" name="nome" id="nome">
         </div>
 
@@ -17,7 +18,7 @@
         </div>
         
         <div class="input-email">
-            <label id="label-email" for="email">E-mail</label>
+            <label id="label-email" for="email">E-mail<span style="color: red;">*</span></label>
             <input type="email" name="email" id="email">
         </div>
         
