@@ -31,6 +31,7 @@ form{
     font-size: 14px;
     font-weight: 500;
     color: #333;
+    font-weight: bold;
 }
 
 .input-nome input{
@@ -42,6 +43,20 @@ form{
     color: #333;
 }
 
+.input-radio-sexo{
+    display: flex;
+    gap: 10px;
+}
+
+.input-radio-sexo label {
+    padding-right: 1rem;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+
 .input-telefone{
     display: flex;
     flex-direction: column;
@@ -52,6 +67,7 @@ form{
     font-size: 14px;
     font-weight: 500;
     color: #333;
+    font-weight: bold;
 }
 
 .input-telefone input{
@@ -73,6 +89,7 @@ form{
     font-size: 14px;
     font-weight: 500;
     color: #333;
+    font-weight: bold;
 }
 
 .input-email input{
@@ -94,6 +111,7 @@ form{
     font-size: 14px;
     font-weight: 500;
     color: #333;
+    font-weight: bold;
 }
 
 .input-observacao input{
