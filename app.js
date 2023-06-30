@@ -23,7 +23,12 @@ app.post('/gerarPDF', (req, res) => {
     const name = req.body.nome;
     const telefone = req.body.telefone;
     const observacao = req.body.observacao;
+    const sexo = req.body.sexo;
+    if(sexo == "" || sexo == undefined){
+        sexo = "Não informado";
+    }
     
+    const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea eos, ducimus dicta odio ipsa natus. Aperiam obcaecati provident iusto recusandae, a consectetur ad? Magni reiciendis quam mollitia et, tempora totam.";
     const doc = new pdfKit();
 
     //res.setHeader('Content-Disposition', 'attachment; filename="example.pdf"');
@@ -32,11 +37,13 @@ app.post('/gerarPDF', (req, res) => {
     doc.pipe(res);
 
     doc.font('Helvetica');
-    doc.fontSize(24).text('Informações do Formulário:', { align: 'center' });
-    doc.fontSize(14).text(`Nome: ${name}`);
-    doc.fontSize(14).text(`E-mail: ${email}`);
-    doc.fontSize(14).text(`Telefone: ${telefone}`);
-    doc.fontSize(14).text(`Observação: ${observacao}`);
+    doc.fontSize(24).text('Informações do Formulário:', { align: 'center' , lineGap: 10});
+    doc.fontSize(14).moveDown().text(`Nome: ${name}`, {lineGap: 10});
+    doc.fontSize(14).text(`Sexo: ${sexo}`, {lineGap: 10});
+    doc.fontSize(14).text(`E-mail: ${email}`, {lineGap: 10});
+    doc.fontSize(14).text(`Telefone: ${telefone}`, {lineGap: 10});
+    doc.fontSize(14).text(`Observação: ${observacao}`, {lineGap: 10});
+    doc.fontSize(14).moveDown().text(`${lorem}`, {lineGap: 10, align: 'justify'});
 
     doc.end();
 
