@@ -31,9 +31,7 @@ app.post('/gerarPDF', (req, res) => {
     const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea eos, ducimus dicta odio ipsa natus. Aperiam obcaecati provident iusto recusandae, a consectetur ad? Magni reiciendis quam mollitia et, tempora totam.";
     const doc = new pdfKit();
 
-    //res.setHeader('Content-Disposition', 'attachment; filename="example.pdf"');
     res.setHeader('Content-Type', 'application/pdf');
-
     doc.pipe(res);
 
     doc.font('Helvetica');
