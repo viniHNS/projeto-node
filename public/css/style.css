@@ -29,7 +29,166 @@ form{
     box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
 }
 
+.input-data-nascimento{
+    
+    display: flex;
+    flex-direction: column;
+    width: 10rem;
+    gap: 5px;
+}
 
+.input-data-nascimento label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-data-nascimento input{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+
+
+.input-periodo-estuda{
+    display: flex;
+    width: 10rem;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-periodo-estuda label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-periodo-estuda select{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.input-observacoes{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-observacoes label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-observacoes textarea{
+    height: 100px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    resize: none;
+}
+
+.input-nome-responsavel{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-nome-responsavel label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-nome-responsavel input{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.input-telefone-responsavel{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 15rem;
+}
+
+.input-telefone-responsavel label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-telefone-responsavel input{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.input-email-responsavel{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-email-responsavel label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-email-responsavel input{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.input-endereco-responsavel{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-endereco-responsavel label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-endereco-responsavel input{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
 
 .input-nome{
     display: flex;

@@ -1,0 +1,61 @@
+<div class="container">
+    <form action="/cadastroAluno" method="post" id="cadastroAluno">
+        <h4 style="text-align: center; font-weight: bold;">Dados do Aluno</h4>
+        <div class="input-nome">
+            <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
+            <input type="text" name="nome" id="nome">
+        </div>
+
+        <div class="input-radio-sexo">
+            <label for="sexo">Sexo</label>
+            <input type="radio" name="sexo" id="sexo" value="Masculino">Masculino
+            <input type="radio" name="sexo" id="sexo" value="Feminino">Feminino
+        </div>
+
+        <div class="input-data-nascimento">
+            <label for="dataNascimento">Data de Nascimento</label>
+            <input type="text" name="dataNascimento" id="dataNascimento" placeholder="Dia / Mês / Ano">
+        </div>
+    
+        <div class="input-periodo-estuda">
+            <label for="periodo">Período que estuda</label>
+            <select name="periodo" id="periodo">
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+                <option value="Noite">Noite</option>
+            </select>
+        </div>
+
+        <div class="input-observacoes">
+            <label for="observacoes">Observações</label>
+            <textarea name="observacoes" id="observacoes" cols="30" rows="10"></textarea>
+        </div>
+
+        <hr>
+
+        <h4 style="text-align: center; font-weight: bold;">Dados do Responsável</h4>
+
+        <div class="input-nome-responsavel">
+            <label for="nomeResponsavel">Nome do Responsável</label>
+            <input type="text" name="nomeResponsavel" id="nomeResponsavel">
+        </div>
+        <div class="input-telefone-responsavel">
+            <label for="telefoneResponsavel">Telefone do Responsável</label>
+            <input type="text" name="telefoneResponsavel" id="telefoneResponsavel">
+        </div>
+        <div class="input-email-responsavel">
+            <label for="emailResponsavel">E-mail do Responsável</label>
+            <input type="email" name="emailResponsavel" id="emailResponsavel">
+        </div>
+        <div class="input-endereco-responsavel">
+            <label for="enderecoResponsavel">Endereço do Responsável</label>
+            <input type="text" name="enderecoResponsavel" id="enderecoResponsavel">
+        </div>
+          
+
+        <div class="input-submit">
+            <input type="submit" value="Cadastrar">
+        </div>
+    </form>
+</div>
+<script src="public/js/script2.js"></script>

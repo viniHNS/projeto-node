@@ -1,0 +1,36 @@
+<div class="container">
+    <form action="/gerarPDF" method="post">
+        <div class="input-nome">
+            <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
+            
+            <input type="text" name="nome" id="nome">
+        </div>
+
+        <div class="input-radio-sexo">
+            <label for="sexo">Sexo</label>
+            <input type="radio" name="sexo" id="sexo" value="Masculino">Masculino
+            <input type="radio" name="sexo" id="sexo" value="Feminino">Feminino
+        </div>
+        
+        <div class="input-telefone">
+            <label for="telefone">Telefone</label>
+            <input type="text" name="telefone" id="telefone">
+        </div>
+        
+        <div class="input-email">
+            <label id="label-email" for="email">E-mail<span style="color: red;">*</span></label>
+            <input type="email" name="email" id="email">
+        </div>
+        
+        <div class="input-observacao">
+            <label for="observacao">Observação</label>
+            <input type="text" name="observacao" id="observacao">
+        </div>
+
+        <input id="btn-submit" type="submit" value="Gerar">   
+    </form>
+</div>
+<script src="public/js/script1.js"></script>
+
+
+
