@@ -94,9 +94,10 @@ app.post('/cadastroAluno', async (req, res) => {
         await aluno.create({nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodo, observacao: observacao, responsavel: {nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel}});
         console.log('Dados inseridos com sucesso');
         res.render('cadastroAluno');
-        //
+        
       } catch (error) {
         console.error('Erro ao inserir dados:', error);
+        res.status(500).redirect('https://http.cat/images/500.jpg');
       }
 });
 
