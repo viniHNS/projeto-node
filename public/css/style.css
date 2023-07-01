@@ -293,7 +293,7 @@ form{
 }
 
 input[type="submit"]{
-    
+    display: block;
     align-items: center;
     margin: 10px auto;
     width: 50%;
