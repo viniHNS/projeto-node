@@ -1,5 +1,7 @@
 <div class="container">
     <form action="/cadastroAluno" method="post" id="cadastroAluno">
+        <h3 style="text-align: center; font-weight: bold; margin-top: 24px;">Cadastrar Aluno</h3>
+        <hr>
         <h4 style="text-align: center; font-weight: bold;">Dados do Aluno</h4>
         <div class="input-nome">
             <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
@@ -7,19 +9,19 @@
         </div>
 
         <div class="input-radio-sexo">
-            <label for="sexo">Sexo</label>
-            <input type="radio" name="sexo" id="sexo" value="Masculino">Masculino
-            <input type="radio" name="sexo" id="sexo" value="Feminino">Feminino
+            <label id="label-sexo" for="sexo">Sexo<span style="color: red;">*</span></label>
+            <input type="radio" name="sexo" id="sexo" value="Masculino"><span class="radio-sexo-masculino">Masculino</span>
+            <input type="radio" name="sexo" id="sexo" value="Feminino"><span class="radio-sexo-feminino">Feminino</span>
         </div>
 
         <div class="input-data-nascimento">
-            <label for="dataNascimento">Data de Nascimento</label>
+            <label id="label-dataNascimento" for="dataNascimento">Data de Nascimento<span style="color: red;">*</span></label>
             <input type="text" name="dataNascimento" id="dataNascimento" placeholder="Dia / Mês / Ano">
         </div>
     
         <div class="input-periodo-estuda">
-            <label for="periodo">Período que estuda</label>
-            <select name="periodo" id="periodo">
+            <label id="label-periodoEstudo" for="periodoEstudo">Período que estuda<span style="color: red;">*</span></label>
+            <select name="periodoEstudo" id="periodoEstudo">
                 <option value="Manhã">Manhã</option>
                 <option value="Tarde">Tarde</option>
                 <option value="Noite">Noite</option>
@@ -36,7 +38,7 @@
         <h4 style="text-align: center; font-weight: bold;">Dados do Responsável</h4>
 
         <div class="input-nome-responsavel">
-            <label for="nomeResponsavel">Nome do Responsável</label>
+            <label id="label-nomeResponsavel" for="nomeResponsavel">Nome do Responsável<span style="color: red;">*</span></label>
             <input type="text" name="nomeResponsavel" id="nomeResponsavel">
         </div>
         <div class="input-telefone-responsavel">
