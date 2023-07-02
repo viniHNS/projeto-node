@@ -54,34 +54,12 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/gerarPDF', (req, res) => {
-    res.render('geradorPDF');
+app.get('/ajuda', (req, res) => {
+    res.render('ajuda');
 });
 
-app.post('/gerarPDF', async (req, res) => {
-    let email = req.body.email;
-    let nome = req.body.nome;
-    let telefone = req.body.telefone;
-    let observacao = req.body.observacao;
-    let sexo = req.body.sexo;
-    if(sexo == "" || sexo == undefined){
-        sexo = "Não informado";
-    }
-
-    const pdf = require('./models/pdf.js');
-
-    try { 
-        await pdf.create({nome, sexo, email, telefone, observacao});
-        console.log('Dados inseridos com sucesso');
-        res.render('geradorPDF');
-        //
-      } catch (error) {
-        console.error('Erro ao inserir dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');
-      }
-
-    
-    /*
+   
+/*
     //geração do PDF
 
     const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea eos, ducimus dicta odio ipsa natus. Aperiam obcaecati provident iusto recusandae, a consectetur ad? Magni reiciendis quam mollitia et, tempora totam.";
@@ -101,7 +79,32 @@ app.post('/gerarPDF', async (req, res) => {
     doc.fontSize(14).moveDown().text(`${lorem}`, {lineGap: 10, align: 'justify'});
 
     doc.end();
-    */
+*/
+
+app.post('/deletarAluno/:id', async (req, res) => {
+    const aluno = require('./models/aluno.js');
+    let id = req.params.id;
+    try {
+        await aluno.findByIdAndDelete(id);
+        res.redirect('/consultaAluno');
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        res.status(500).redirect('https://http.cat/images/500.jpg');    
+    }
+});
+
+app.get('/listarAluno/:id', async (req, res) => {
+    const aluno = require('./models/aluno.js');
+    let id = req.params.id;
+    let dataEdicao = await aluno.findById(id).select('updatedAt').lean();
+    dataEdicao = dataEdicao.updatedAt.toLocaleString('pt-BR');
+    try {
+        let alunos = await aluno.findById(id).lean();
+        res.render('./listar/listarAluno', {alunos, dataEdicao});
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        res.status(500).redirect('https://http.cat/images/500.jpg');    
+    }
 });
 
 app.get('/cadastroAluno', (req, res) => {
@@ -113,7 +116,7 @@ app.post('/cadastroAluno', async (req, res) => {
     let sexo = req.body.sexo;
     let dataNascimento = req.body.dataNascimento;
     let periodoEstudo = req.body.periodoEstudo;
-    let observacao = req.body.observacao;
+    let observacao = req.body.observacoes;
     let nomeResponsavel = req.body.nomeResponsavel;
     let telefoneResponsavel = req.body.telefoneResponsavel;
     let emailResponsavel = req.body.emailResponsavel;
@@ -163,7 +166,7 @@ app.post('/editarAluno/:id', async (req, res) => {
     let sexo = req.body.sexo;
     let dataNascimento = req.body.dataNascimento;
     let periodoEstudo = req.body.periodoEstudo;
-    let observacao = req.body.observacao;
+    let observacao = req.body.observacoes;
     let nomeResponsavel = req.body.nomeResponsavel;
     let telefoneResponsavel = req.body.telefoneResponsavel;
     let emailResponsavel = req.body.emailResponsavel;
@@ -189,7 +192,6 @@ app.post('/editarAluno/:id', async (req, res) => {
     }
 
 });
-
 
 app.listen(process.env.PORT, () => {
     console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);

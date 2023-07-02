@@ -31,13 +31,12 @@ const alunoSchema = new Schema({
         },
         endereco: {
             type: String,
-            
         },
     },
     
     observacao: {
         type: String,
-    }  
+    },
      
 }, { timestamps: true });
 

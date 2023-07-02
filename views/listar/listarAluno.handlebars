@@ -1,0 +1,70 @@
+<div class="container">
+   
+    <form action="/consultaAluno/" method="get" id="editarAluno">
+        <h3 style="text-align: center; font-weight: bold; margin-top: 24px;">Consultar Aluno</h3>
+        <hr>
+        <h4 style="text-align: center; font-weight: bold;">Dados do Aluno</h4>
+        <div class="input-nome">
+            <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
+            <input type="text" name="nome" id="nome" value="{{alunos.nome}}" disabled>
+        </div>
+
+        <div class="input-radio-sexo">
+            <label id="label-sexo" for="sexo">Sexo<span style="color: red;">*</span></label>
+            <input type="radio" name="sexo" id="sexo-masculino" value="Masculino" {{#ifCond alunos.sexo '==' 'Masculino'}}checked{{/ifCond}} disabled>
+            <span class="radio-sexo-masculino">Masculino</span>
+            <input type="radio" name="sexo" id="sexo-feminino" value="Feminino" {{#ifCond alunos.sexo '==' 'Feminino'}}checked{{/ifCond}} disabled>
+            <span class="radio-sexo-feminino">Feminino</span>
+        </div>
+
+        <div class="input-data-nascimento">
+            <label id="label-dataNascimento" for="dataNascimento">Data de Nascimento<span style="color: red;">*</span></label>
+            <input type="text" name="dataNascimento" id="dataNascimento" placeholder="Dia / Mês / Ano" value="{{alunos.data_nascimento}}" disabled>
+        </div>
+    
+        <div class="input-periodo-estuda">
+        <label id="label-periodoEstudo" for="periodoEstudo">Período que estuda<span style="color: red;">*</span></label>
+        <select name="periodoEstudo" id="periodoEstudo" disabled>
+            <option value="Manhã" {{#ifCond alunos.periodoEstudo "==" "Manhã"}}selected{{/ifCond}}>Manhã</option>
+            <option value="Tarde" {{#ifCond alunos.periodoEstudo "==" "Tarde"}}selected{{/ifCond}}>Tarde</option>
+            <option value="Noite" {{#ifCond alunos.periodoEstudo "==" "Noite"}}selected{{/ifCond}}>Noite</option>
+        </select>
+        </div>
+
+        <div class="input-observacoes">
+            <label for="observacoes">Observações</label>
+            <textarea name="observacoes" id="observacoes" cols="30" rows="10" disabled>{{#if alunos.observacao}}{{alunos.observacao}}{{/if}}
+            </textarea>
+        </div>
+
+        <hr>
+
+        <h4 style="text-align: center; font-weight: bold;">Dados do Responsável</h4>
+
+        <div class="input-nome-responsavel">
+            <label id="label-nomeResponsavel" for="nomeResponsavel">Nome do Responsável<span style="color: red;">*</span></label>
+            <input type="text" name="nomeResponsavel" id="nomeResponsavel" value="{{alunos.responsavel.nome}}" disabled>
+        </div>
+        <div class="input-telefone-responsavel">
+            <label for="telefoneResponsavel">Telefone do Responsável</label>
+            <input type="text" name="telefoneResponsavel" id="telefoneResponsavel" value="{{alunos.responsavel.telefone}}" disabled>
+        </div>
+        <div class="input-email-responsavel">
+            <label for="emailResponsavel">E-mail do Responsável</label>
+            <input type="email" name="emailResponsavel" id="emailResponsavel" value="{{alunos.responsavel.email}}" disabled>
+        </div>
+        <div class="input-endereco-responsavel">
+            <label for="enderecoResponsavel">Endereço do Responsável</label>
+            <input type="text" name="enderecoResponsavel" id="enderecoResponsavel" value="{{alunos.responsavel.endereco}}" disabled>
+        </div>
+
+        <div class="data-edicao">
+            <label for="dataEdicao">Data de Edição</label>
+            <input type="text" name="dataEdicao" id="dataEdicao" value="{{dataEdicao}}" disabled>
+        </div>
+          
+        <div class="input-submit">
+            <input type="submit" value="Voltar">
+        </div>
+    </form>
+</div>

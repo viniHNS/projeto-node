@@ -1,7 +1,7 @@
 <div class="container">
-    <table class="table table-striped table-hover table-striped-columns table-bordered">
+    <table class="table table-striped table-hover table-bordered">
         <thead>
-            <tr>
+            <tr class="table-dark">
                 <th scope="col">Nome do Aluno</th>
                 <th scope="col">Data de Nascimento</th>
                 <th scope="col">Sexo</th>
@@ -19,10 +19,13 @@
                     <td>{{sexo}}</td>
                     <td>{{periodoEstudo}}</td>
                     <td style="display: flex; gap: 1.5rem;">
-                        <a href="#" data-bs-toggle="popover" data-bs-content="Consultar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-magnifying-glass" style="color: green;"></i></a>
+                        <a href="/listarAluno/{{this._id}}" data-bs-toggle="popover" data-bs-content="Consultar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-magnifying-glass" style="color: green;"></i></a>
                         <a href="/editarAluno/{{this._id}}" data-bs-toggle="popover" data-bs-content="Editar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-pen"></i></a>
-                        <a href="#" data-bs-toggle="popover" data-bs-content="Deletar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-trash" style="color: red;"></i></a>
-                    </td>    
+                        <form class="form-consulta" action="/deletarAluno/{{this._id}}" method="post">
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit" id="btn-deletar" data-bs-toggle="popover" data-bs-content="Deletar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-trash" style="color: red;"></i></button>
+                        </form>
+                    </td>
                 </tr>
                 {{/each}}
                 {{else}}
@@ -32,6 +35,7 @@
                 {{/if}}
             </ul>
         </tbody>
-
     </table>
+
+    <script src="public/js/scriptConsulta.js"></script>
 </div>

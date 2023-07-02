@@ -11,9 +11,9 @@
 
         <div class="input-radio-sexo">
             <label id="label-sexo" for="sexo">Sexo<span style="color: red;">*</span></label>
-            <input type="radio" name="sexo" id="sexo-masculino" value="Masculino" {{#ifCond aluno.sexo '==' 'Masculino'}}checked{{/ifCond}}>
+            <input class="radio-sexo-masculino" type="radio" name="sexo" id="sexo-masculino" value="Masculino" {{#ifCond aluno.sexo '==' 'Masculino'}}checked{{/ifCond}}>
             <span class="radio-sexo-masculino">Masculino</span>
-            <input type="radio" name="sexo" id="sexo-feminino" value="Feminino" {{#ifCond aluno.sexo '==' 'Feminino'}}checked{{/ifCond}}>
+            <input class="radio-sexo-masculino" type="radio" name="sexo" id="sexo-feminino" value="Feminino" {{#ifCond aluno.sexo '==' 'Feminino'}}checked{{/ifCond}}>
             <span class="radio-sexo-feminino">Feminino</span>
         </div>
 
@@ -33,10 +33,7 @@
 
         <div class="input-observacoes">
             <label for="observacoes">Observações</label>
-            <textarea name="observacoes" id="observacoes" cols="30" rows="10">
-                {{#if aluno.observacoes}}
-                    {{aluno.observacoes}}
-                {{/if}}
+            <textarea name="observacoes" id="observacoes" cols="30" rows="10">{{#if aluno.observacao}}{{aluno.observacao}}{{/if}}
             </textarea>
         </div>
 
@@ -67,4 +64,4 @@
     </form>
 
 </div>
-<script src="public/js/script2.js"></script>
+<script src="/public/js/script2.js"></script>

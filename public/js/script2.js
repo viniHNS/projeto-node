@@ -1,4 +1,5 @@
 VMasker(document.querySelector("#dataNascimento")).maskPattern("99/99/9999");
+VMasker(document.querySelector("#telefoneResponsavel")).maskPattern("(99) 99999-9999");
 
 let isNomeSet = false;
 let isDataNascimentoSet = false;
@@ -6,12 +7,16 @@ let isSexoSet = false;
 let isPeriodoEstudoSet = false;
 let isResponsavelNomeSet = false;
 
+const masculinoRadioButton = document.querySelector(".radio-sexo-masculino");
+const femininoRadioButton = document.querySelector(".radio-sexo-feminino");
+const sexoLabel = document.querySelector("#label-sexo");
+
 document.querySelector("form").addEventListener("submit", (e) => {
     e.preventDefault();
 });
 
 document.querySelector("input[type='submit']").addEventListener("click", (e) => {
-    if(document.querySelector("#nome").value == ""){
+    if(document.querySelector("#nome").value == "" || document.querySelector("#nome").value == null || document.querySelector("#nome").value == undefined){
         document.querySelector("#nome").style.cssText = "border: 1px solid red;" 
         document.querySelector("#label-nome").style.cssText = "color:red;" 
         isNomeSet = false;
@@ -31,17 +36,17 @@ document.querySelector("input[type='submit']").addEventListener("click", (e) => 
         isDataNascimentoSet = true;
     }
 
-    if(document.querySelector("#sexo").checked == false){
-        document.querySelector("#label-sexo").style.cssText = "color:red;"
-        document.querySelector(".radio-sexo-masculino").style.cssText = "color:red;"
-        document.querySelector(".radio-sexo-feminino").style.cssText = "color:red;"
+    if (!masculinoRadioButton.checked && !femininoRadioButton.checked) {
+        sexoLabel.style.color = "red";
+        masculinoRadioButton.parentElement.style.color = "red";
+        femininoRadioButton.parentElement.style.color = "red";
         isSexoSet = false;
-    }else{
-        document.querySelector("#label-sexo").removeAttribute("style");
-        document.querySelector(".radio-sexo-masculino").removeAttribute("style");
-        document.querySelector(".radio-sexo-feminino").removeAttribute("style");
+      } else {
+        sexoLabel.style.removeProperty("color");
+        masculinoRadioButton.parentElement.style.removeProperty("color");
+        femininoRadioButton.parentElement.style.removeProperty("color");
         isSexoSet = true;
-    }
+      }
 
     if(document.querySelector("#periodoEstudo").value == ""){
         document.querySelector("#periodoEstudo").style.cssText = "border: 1px solid red;" 
