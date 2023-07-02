@@ -65,17 +65,14 @@ app.post('/relatorio/aluno/:id', async (req, res) => {
         let alunos = await aluno.findById(id).lean();
         
         //geração do PDF
-
-        const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea eos, ducimus dicta odio ipsa natus. Aperiam obcaecati provident iusto recusandae, a consectetur ad? Magni reiciendis quam mollitia et, tempora totam.";
-
-        const doc = new pdfKit();
-
+        const doc = new pdfKit({ size: 'A4', margin: 50});
         res.setHeader('Content-Type', 'application/pdf');
         doc.pipe(res);
 
         doc.font('Helvetica');
         doc.fontSize(24).text('Informações do Formulário:', { align: 'center' , lineGap: 10});
-        doc.fontSize(14).moveDown().text(`Nome: ${alunos.nome}`, {lineGap: 10});
+        doc.fontSize(18).moveDown().text(`Dados do aluno`, {lineGap: 10});
+        doc.fontSize(14).text(`Nome: ${alunos.nome}`, {lineGap: 10});
         doc.fontSize(14).text(`Sexo: ${alunos.sexo}`, {lineGap: 10});
         doc.fontSize(14).text(`Data de nascimento: ${alunos.data_nascimento}`, {lineGap: 10});
         doc.fontSize(14).text(`Periodo em que estuda: ${alunos.periodoEstudo}`, {lineGap: 10});
