@@ -26,3 +26,6 @@ btnDeletarList.forEach(btnDeletar => {
   btnDeletar.addEventListener('click', confirmarExclusao);
 });
 
+
+
+

@@ -33,7 +33,7 @@
 
         <div class="input-observacoes">
             <label for="observacoes">Observações</label>
-            <textarea name="observacoes" id="observacoes" cols="30" rows="10">{{#if aluno.observacao}}{{aluno.observacao}}{{/if}}
+            <textarea name="observacoes" id="observacoes" cols="30" rows="10">{{#if aluno.observacao}}{{observacao}}{{/if}}
             </textarea>
         </div>
 
@@ -57,7 +57,12 @@
             <label for="enderecoResponsavel">Endereço do Responsável</label>
             <input type="text" name="enderecoResponsavel" id="enderecoResponsavel" value="{{aluno.responsavel.endereco}}">
         </div>
-          
+
+        <div class="input-ativo">
+            <label for="ativo">Ativo</label>
+            <input type="checkbox" name="ativo" id="ativo" {{#if aluno.ativo}}checked{{/if}}>
+        </div>
+ 
         <div class="input-submit">
             <input type="submit" value="Atualizar">
         </div>

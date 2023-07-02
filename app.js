@@ -58,28 +58,43 @@ app.get('/ajuda', (req, res) => {
     res.render('ajuda');
 });
 
-   
-/*
-    //geração do PDF
+app.post('/relatorio/aluno/:id', async (req, res) => {
+    const aluno = require('./models/aluno.js');
+    let id = req.params.id;
+    try {
+        let alunos = await aluno.findById(id).lean();
+        
+        //geração do PDF
 
-    const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea eos, ducimus dicta odio ipsa natus. Aperiam obcaecati provident iusto recusandae, a consectetur ad? Magni reiciendis quam mollitia et, tempora totam.";
+        const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea eos, ducimus dicta odio ipsa natus. Aperiam obcaecati provident iusto recusandae, a consectetur ad? Magni reiciendis quam mollitia et, tempora totam.";
 
-    const doc = new pdfKit();
+        const doc = new pdfKit();
 
-    res.setHeader('Content-Type', 'application/pdf');
-    doc.pipe(res);
+        res.setHeader('Content-Type', 'application/pdf');
+        doc.pipe(res);
 
-    doc.font('Helvetica');
-    doc.fontSize(24).text('Informações do Formulário:', { align: 'center' , lineGap: 10});
-    doc.fontSize(14).moveDown().text(`Nome: ${name}`, {lineGap: 10});
-    doc.fontSize(14).text(`Sexo: ${sexo}`, {lineGap: 10});
-    doc.fontSize(14).text(`E-mail: ${email}`, {lineGap: 10});
-    doc.fontSize(14).text(`Telefone: ${telefone}`, {lineGap: 10});
-    doc.fontSize(14).text(`Observação: ${observacao}`, {lineGap: 10});
-    doc.fontSize(14).moveDown().text(`${lorem}`, {lineGap: 10, align: 'justify'});
+        doc.font('Helvetica');
+        doc.fontSize(24).text('Informações do Formulário:', { align: 'center' , lineGap: 10});
+        doc.fontSize(14).moveDown().text(`Nome: ${alunos.nome}`, {lineGap: 10});
+        doc.fontSize(14).text(`Sexo: ${alunos.sexo}`, {lineGap: 10});
+        doc.fontSize(14).text(`Data de nascimento: ${alunos.data_nascimento}`, {lineGap: 10});
+        doc.fontSize(14).text(`Periodo em que estuda: ${alunos.periodoEstudo}`, {lineGap: 10});
+        doc.fontSize(14).text(`Observação: ${alunos.observacao}`, {lineGap: 10});
+        doc.fontSize(18).moveDown().text(`Dados do responsável`, {lineGap: 10});
+        doc.fontSize(14).text(`Nome: ${alunos.responsavel.nome}`, {lineGap: 10});
+        doc.fontSize(14).text(`Telefone: ${alunos.responsavel.telefone}`, {lineGap: 10});
+        doc.fontSize(14).text(`Email: ${alunos.responsavel.email}`, {lineGap: 10});
+        doc.fontSize(14).text(`Endereço: ${alunos.responsavel.endereco}`, {lineGap: 10});
+        doc.fontSize(14).text(`Ativo: ${alunos.ativo}`, {lineGap: 10});
+        
+        doc.end();
 
-    doc.end();
-*/
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        res.status(500).redirect('https://http.cat/images/500.jpg');    
+    }
+});
+
 
 app.post('/deletarAluno/:id', async (req, res) => {
     const aluno = require('./models/aluno.js');
@@ -97,10 +112,13 @@ app.get('/listarAluno/:id', async (req, res) => {
     const aluno = require('./models/aluno.js');
     let id = req.params.id;
     let dataEdicao = await aluno.findById(id).select('updatedAt').lean();
+    let alunoData = await aluno.findById(id).select('observacao').lean();
+    let observacao = alunoData.observacao ? alunoData.observacao.trim() : '';
+
     dataEdicao = dataEdicao.updatedAt.toLocaleString('pt-BR');
     try {
         let alunos = await aluno.findById(id).lean();
-        res.render('./listar/listarAluno', {alunos, dataEdicao});
+        res.render('./listar/listarAluno', {alunos, dataEdicao, observacao});
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
@@ -121,11 +139,18 @@ app.post('/cadastroAluno', async (req, res) => {
     let telefoneResponsavel = req.body.telefoneResponsavel;
     let emailResponsavel = req.body.emailResponsavel;
     let enderecoResponsavel = req.body.enderecoResponsavel;
+    let ativo = req.body.ativo;
+
+    if(ativo == 'on') {
+      ativo = true;
+    } else {
+      ativo = false;
+    }
 
     const aluno = require('./models/aluno.js');
 
     try { 
-        await aluno.create({nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: {nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel}});
+        await aluno.create({nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: {nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo}});
         console.log('Dados inseridos com sucesso');
         res.render('cadastroAluno');
         
@@ -152,7 +177,8 @@ app.get('/editarAluno/:id', async (req, res) => {
     let id = req.params.id;
     try {
         let alunoEdit = await aluno.findById(id).lean();
-        res.render('./editar/editarAluno', {aluno: alunoEdit});
+        let observacao = alunoEdit.observacao ? alunoEdit.observacao.trim() : '';
+        res.render('./editar/editarAluno', {aluno: alunoEdit, observacao});
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
@@ -167,10 +193,18 @@ app.post('/editarAluno/:id', async (req, res) => {
     let dataNascimento = req.body.dataNascimento;
     let periodoEstudo = req.body.periodoEstudo;
     let observacao = req.body.observacoes;
+    observacao = observacao.trim();
     let nomeResponsavel = req.body.nomeResponsavel;
     let telefoneResponsavel = req.body.telefoneResponsavel;
     let emailResponsavel = req.body.emailResponsavel;
     let enderecoResponsavel = req.body.enderecoResponsavel;
+    let ativo = req.body.ativo;
+
+    if(ativo == 'on') {
+        ativo = true;
+    } else {
+        ativo = false;
+    }
 
     try {
         let alunoEdit = await aluno.findById(id);
@@ -183,6 +217,7 @@ app.post('/editarAluno/:id', async (req, res) => {
         alunoEdit.responsavel.telefone = telefoneResponsavel;
         alunoEdit.responsavel.email = emailResponsavel;
         alunoEdit.responsavel.endereco = enderecoResponsavel;
+        alunoEdit.ativo = ativo;
         await alunoEdit.save();
         res.redirect('/consultaAluno');
 

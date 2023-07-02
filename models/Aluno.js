@@ -37,6 +37,11 @@ const alunoSchema = new Schema({
     observacao: {
         type: String,
     },
+
+    ativo: {
+        type: Boolean,
+        default: true,
+    },
      
 }, { timestamps: true });
 

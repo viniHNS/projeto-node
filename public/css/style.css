@@ -350,4 +350,43 @@ input[type="submit"]:hover{
     resize: none;
 }
 
+.input-ativo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.input-ativo label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-ativo input{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    resize: none;
+}
+
+.form-relatorio {
+    display: initial;
+    flex-direction: initial;
+    gap: initial;
+    width: initial;
+    margin: initial;
+    background: initial;
+    padding: initial;
+    border-radius: initial;
+    box-shadow: initial;
+}
+
+.form-relatorio button{
+    border: none;
+}
 
