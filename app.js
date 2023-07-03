@@ -10,9 +10,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const cookieParser = require('cookie-parser');
-
-require("dotenv").config();
 const app = express();
+require("dotenv").config();
 
 const handlebars = require('handlebars');
 
@@ -72,7 +71,11 @@ function checkToken(req, res, next) {
   }
 }
 
-app.get('/', checkToken, async (req, res) => {
+app.get('/',  (req, res) => {
+  res.redirect('/login');
+});
+
+app.get('/home', checkToken, async (req, res) => {
   
   try {
     const user = await User.findById(req.userId).lean();
@@ -117,8 +120,8 @@ app.post('/login', async (req, res) => {
 
     const token = jwt.sign({id: user._id}, secret);
     
-    res.cookie('auth-token', token, { httpOnly: true, secure: true });
-    res.redirect('/');
+    res.cookie('auth-token', token, { httpOnly: true, expires: new Date(Date.now() + 900000)});
+    res.redirect('/home');
   
   } catch (error) {
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -348,7 +351,6 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
     }
-
 });
 
 app.listen(process.env.PORT, () => {
