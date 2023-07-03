@@ -180,10 +180,7 @@ app.post('/register', async (req, res) => {
     console.error('Erro ao inserir dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
-
-
 });
-
 
 app.get('/ajuda', checkToken, (req, res) => {
     res.render('ajuda');
@@ -222,7 +219,6 @@ app.post('/relatorio/aluno/:id', checkToken, async (req, res) => {
         res.status(500).redirect('https://http.cat/images/500.jpg');    
     }
 });
-
 
 app.post('/deletarAluno/:id', checkToken, async (req, res) => {
     const aluno = require('./models/Aluno.js');
@@ -322,6 +318,7 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
     let periodoEstudo = req.body.periodoEstudo;
     let observacao = req.body.observacoes;
     observacao = observacao.trim();
+
     let nomeResponsavel = req.body.nomeResponsavel;
     let telefoneResponsavel = req.body.telefoneResponsavel;
     let emailResponsavel = req.body.emailResponsavel;
@@ -358,4 +355,3 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
 app.listen(process.env.PORT, () => {
     console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
 });
-
