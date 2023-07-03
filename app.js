@@ -11,9 +11,11 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const cookieParser = require('cookie-parser');
 const app = express();
+const swal = require('sweetalert2');
 require("dotenv").config();
 
 const handlebars = require('handlebars');
+const { default: Swal } = require('sweetalert2');
 
 handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
   switch (operator) {
@@ -158,10 +160,10 @@ app.post('/register', async (req, res) => {
 
   const userExists = await User.findOne({email: email});
 
-  if(userExists){
+  if (userExists) {
     return res.status(422).send('<script>alert("Email já cadastrado"); window.location.href = "/login";</script>');
   }
-
+    
   const salt = await bcrypt.genSalt(12);
   const passwordHash = await bcrypt.hash(password, salt);
 
@@ -188,7 +190,7 @@ app.get('/ajuda', checkToken, (req, res) => {
 });
 
 app.post('/relatorio/aluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/aluno.js');
+    const aluno = require('./models/Aluno.js');
     let id = req.params.id;
     try {
         let alunos = await aluno.findById(id).lean();
@@ -223,7 +225,7 @@ app.post('/relatorio/aluno/:id', checkToken, async (req, res) => {
 
 
 app.post('/deletarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/aluno.js');
+    const aluno = require('./models/Aluno.js');
     let id = req.params.id;
     try {
         await aluno.findByIdAndDelete(id);
@@ -235,7 +237,7 @@ app.post('/deletarAluno/:id', checkToken, async (req, res) => {
 });
 
 app.get('/listarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/aluno.js');
+    const aluno = require('./models/Aluno.js');
     let id = req.params.id;
     let dataEdicao = await aluno.findById(id).select('updatedAt').lean();
     let alunoData = await aluno.findById(id).select('observacao').lean();
@@ -273,7 +275,7 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
       ativo = false;
     }
 
-    const aluno = require('./models/aluno.js');
+    const aluno = require('./models/Aluno.js');
 
     try { 
         await aluno.create({nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: {nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo}});
@@ -287,7 +289,7 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
 });
 
 app.get('/consultaAluno', checkToken, async (req, res) => {
-    const aluno = require('./models/aluno.js');
+    const aluno = require('./models/Aluno.js');
     
     try {
         let alunos = await aluno.find().sort({ativo : -1}).lean();
@@ -299,7 +301,7 @@ app.get('/consultaAluno', checkToken, async (req, res) => {
 });
 
 app.get('/editarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/aluno.js');
+    const aluno = require('./models/Aluno.js');
     let id = req.params.id;
     try {
         let alunoEdit = await aluno.findById(id).lean();
@@ -312,7 +314,7 @@ app.get('/editarAluno/:id', checkToken, async (req, res) => {
 });
 
 app.post('/editarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/aluno.js');
+    const aluno = require('./models/Aluno.js');
     let id = req.params.id;
     let nome = req.body.nome;
     let sexo = req.body.sexo;
