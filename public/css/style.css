@@ -389,3 +389,19 @@ input[type="submit"]:hover{
 .form-relatorio button{
     border: none;
 }
+
+.form-sair{
+    display: initial;
+    flex-direction: initial;
+    gap: initial;
+    width: initial;
+    margin: initial;
+    background: initial;
+    padding: initial;
+    border-radius: initial;
+    box-shadow: initial;
+}
+
+.form-sair button{
+    border: none;
+}

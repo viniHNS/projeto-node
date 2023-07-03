@@ -7,7 +7,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav d-flex align-items-center gap-4">
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/">Home</a>
                     </li>
@@ -34,8 +34,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/ajuda">Ajuda</a>
                     </li>
+
+                    <li class="nav-item">
+                        <form class="form-sair gap-2" action="/logout" method="post">
+                            <button type="submit" class="btn btn-danger">Sair</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+

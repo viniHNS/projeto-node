@@ -4,8 +4,12 @@ const bodyParser = require('body-parser');
 const pdfKit = require('pdfkit');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const conn = require('./db/conn.js');
+const conn = require('./db/conn');
 const colors = require('colors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
+const cookieParser = require('cookie-parser');
 
 require("dotenv").config();
 const app = express();
@@ -47,18 +51,140 @@ app.set('views', './views');
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 conn();
 
-app.get('/', (req, res) => {
-    res.render('home');
+function checkToken(req, res, next) {
+  const token = req.cookies['auth-token'];
+  
+  if (!token) {
+    return res.status(401).redirect('https://http.cat/images/401.jpg');
+  }
+
+  try {
+    const secret = process.env.SECRET;
+    const decodedToken = jwt.verify(token, secret);
+    req.userId = decodedToken.id;
+    next();
+  } catch (error) {
+    return res.status(400).redirect('https://http.cat/images/400.jpg');
+  }
+}
+
+app.get('/', checkToken, async (req, res) => {
+  
+  try {
+    const user = await User.findById(req.userId).lean();
+    let nome = user.nome;
+    res.render('home', {nome});
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+  
 });
 
-app.get('/ajuda', (req, res) => {
+app.get('/login', (req, res) => {
+    res.render('login', {layout: 'login'});
+});
+
+app.post('/login', async (req, res) => {
+  const {email, password} = req.body;
+
+  if(!email){
+    return res.status(422).send('<script>alert("Email não informado"); window.location.href = "/login";</script>');
+  }
+
+  if(!password){
+    return res.status(422).send('<script>alert("Senha não informada"); window.location.href = "/login";</script>');
+  }
+
+  const user = await User.findOne({email: email});
+
+  if(!user){
+    return res.status(404).send('<script>alert("Email não encontrado"); window.location.href = "/login";</script>');
+  }
+
+  const checkPassword = await bcrypt.compare(password, user.senha);
+
+  if(!checkPassword){
+    return res.status(404).send('<script>alert("Senha incorreta"); window.location.href = "/login";</script>');
+  }
+
+  try {
+    const secret = process.env.SECRET;
+
+    const token = jwt.sign({id: user._id}, secret);
+    
+    res.cookie('auth-token', token, { httpOnly: true, secure: true });
+    res.redirect('/');
+  
+  } catch (error) {
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.post('/logout', (req, res) => {
+  res.clearCookie('auth-token');
+  res.redirect('/login');
+});
+
+app.get('/register', (req, res) => {
+  res.render('register', {layout: 'login'});
+});
+
+app.post('/register', async (req, res) => {
+  const {nome, email, password, password2} = req.body;
+
+  if(!nome){
+    return res.status(422).send('<script>alert("Nome não informado"); window.location.href = "/login";</script>');
+  }
+
+  if(!email){
+    return res.status(422).send('<script>alert("Email não informado"); window.location.href = "/login";</script>');
+  }
+
+  if(!password){
+    return res.status(422).send('<script>alert("Senha não informada"); window.location.href = "/login";</script>');
+  }
+
+  if(password !== password2){
+    return res.status(422).send('<script>alert("Senhas não conferem"); window.location.href = "/login";</script>');
+  }
+
+  const userExists = await User.findOne({email: email});
+
+  if(userExists){
+    return res.status(422).send('<script>alert("Email já cadastrado"); window.location.href = "/login";</script>');
+  }
+
+  const salt = await bcrypt.genSalt(12);
+  const passwordHash = await bcrypt.hash(password, salt);
+
+  const user = new User({
+    nome: nome,
+    email: email,
+    senha: passwordHash,
+  });
+
+  try {
+    await user.save();
+    res.redirect('/login');
+  } catch (error) {
+    console.error('Erro ao inserir dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+
+
+});
+
+
+app.get('/ajuda', checkToken, (req, res) => {
     res.render('ajuda');
 });
 
-app.post('/relatorio/aluno/:id', async (req, res) => {
+app.post('/relatorio/aluno/:id', checkToken, async (req, res) => {
     const aluno = require('./models/aluno.js');
     let id = req.params.id;
     try {
@@ -93,7 +219,7 @@ app.post('/relatorio/aluno/:id', async (req, res) => {
 });
 
 
-app.post('/deletarAluno/:id', async (req, res) => {
+app.post('/deletarAluno/:id', checkToken, async (req, res) => {
     const aluno = require('./models/aluno.js');
     let id = req.params.id;
     try {
@@ -105,7 +231,7 @@ app.post('/deletarAluno/:id', async (req, res) => {
     }
 });
 
-app.get('/listarAluno/:id', async (req, res) => {
+app.get('/listarAluno/:id', checkToken, async (req, res) => {
     const aluno = require('./models/aluno.js');
     let id = req.params.id;
     let dataEdicao = await aluno.findById(id).select('updatedAt').lean();
@@ -122,11 +248,11 @@ app.get('/listarAluno/:id', async (req, res) => {
     }
 });
 
-app.get('/cadastroAluno', (req, res) => {
+app.get('/cadastroAluno', checkToken, (req, res) => {
     res.render('cadastroAluno');
 });
 
-app.post('/cadastroAluno', async (req, res) => {
+app.post('/cadastroAluno', checkToken, async (req, res) => {
     let nome = req.body.nome;
     let sexo = req.body.sexo;
     let dataNascimento = req.body.dataNascimento;
@@ -157,11 +283,11 @@ app.post('/cadastroAluno', async (req, res) => {
       }
 });
 
-app.get('/consultaAluno', async (req, res) => {
+app.get('/consultaAluno', checkToken, async (req, res) => {
     const aluno = require('./models/aluno.js');
     
     try {
-        let alunos = await aluno.find().lean();
+        let alunos = await aluno.find().sort({ativo : -1}).lean();
         res.render('./consulta/consultaAluno', {alunos: alunos});
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
@@ -169,7 +295,7 @@ app.get('/consultaAluno', async (req, res) => {
     }
 });
 
-app.get('/editarAluno/:id', async (req, res) => {
+app.get('/editarAluno/:id', checkToken, async (req, res) => {
     const aluno = require('./models/aluno.js');
     let id = req.params.id;
     try {
@@ -182,7 +308,7 @@ app.get('/editarAluno/:id', async (req, res) => {
     }
 });
 
-app.post('/editarAluno/:id', async (req, res) => {
+app.post('/editarAluno/:id', checkToken, async (req, res) => {
     const aluno = require('./models/aluno.js');
     let id = req.params.id;
     let nome = req.body.nome;
