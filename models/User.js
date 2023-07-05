@@ -4,10 +4,16 @@ const UserSchema = new mongoose.Schema({
     nome: {
         type: String,
     },
+
     email: {
         type: String,
     },
+    
     senha: {
+        type: String,
+    },
+
+    tipoUsuario: {
         type: String,
     },
 }, { timestamps: true });

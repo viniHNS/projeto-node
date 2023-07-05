@@ -11,11 +11,9 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 const cookieParser = require('cookie-parser');
 const app = express();
-const swal = require('sweetalert2');
 require("dotenv").config();
 
 const handlebars = require('handlebars');
-const { default: Swal } = require('sweetalert2');
 
 handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
   switch (operator) {
@@ -81,8 +79,20 @@ app.get('/home', checkToken, async (req, res) => {
   
   try {
     const user = await User.findById(req.userId).lean();
+    if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
+      return res.status(400).redirect('https://http.cat/images/400.jpg');
+    }
+    let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
-    res.render('home', {nome});
+
+    if(tipoUsuario == 'administrador'){
+      res.render('home', {nome, layout: 'admin'} );
+    } 
+
+    if(tipoUsuario != 'administrador'){
+      res.render('home', {nome, layout: 'main'}, );
+    }
+
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -346,6 +356,17 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
         await alunoEdit.save();
         res.redirect('/consultaAluno');
 
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        res.status(500).redirect('https://http.cat/images/500.jpg');    
+    }
+});
+
+app.get('/controlaUsuario', checkToken, async (req, res) => { 
+    const usuario = require('./models/User.js');
+    try {
+        let usuarios = await usuario.find().lean();
+        res.render('controlaUsuario', {usuarios: usuarios});
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
