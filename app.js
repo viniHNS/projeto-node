@@ -373,6 +373,24 @@ app.get('/controlaUsuario', checkToken, async (req, res) => {
     }
 });
 
+app.post('/controlaUsuario', checkToken, async (req, res) => {
+
+});
+
+app.get('/perfil', checkToken, async (req, res) => {
+   
+    try {
+        let usuario = require('./models/User.js');
+        usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
+        console.log(usuario);
+        res.render('meuPerfil', {usuario: usuario});
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        res.status(500).redirect('https://http.cat/images/500.jpg');    
+    }
+});
+
+
 app.listen(process.env.PORT, () => {
     console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
 });
