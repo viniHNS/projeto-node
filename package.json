@@ -11,6 +11,9 @@
     "mongoose": "^7.3.1",
     "pdfkit": "^0.13.0"
   },
+  "scripts": {
+    "dev": "nodemon app.js -e js,hbs,handlebars,css,json,html"
+  },
   "devDependencies": {
     "nodemon": "^2.0.22"
   },
