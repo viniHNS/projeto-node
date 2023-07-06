@@ -192,8 +192,27 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.get('/ajuda', checkToken, (req, res) => {
-    res.render('ajuda');
+app.get('/ajuda', checkToken, async (req, res) => {
+    try {
+      const user = await User.findById(req.userId).lean();
+      if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
+        return res.status(400).redirect('https://http.cat/images/400.jpg');
+      }
+      let tipoUsuario = user.tipoUsuario;
+      let nome = user.nome;
+  
+      if(tipoUsuario == 'administrador'){
+        res.render('ajuda', {layout: 'admin'} );
+      } 
+  
+      if(tipoUsuario != 'administrador'){
+        res.render('ajuda', {layout: 'main'}, );
+      }
+  
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+      res.status(500).redirect('https://http.cat/images/500.jpg');
+    }
 });
 
 app.post('/relatorio/aluno/:id', checkToken, async (req, res) => {
@@ -252,15 +271,47 @@ app.get('/listarAluno/:id', checkToken, async (req, res) => {
     dataEdicao = dataEdicao.updatedAt.toLocaleString('pt-BR');
     try {
         let alunos = await aluno.findById(id).lean();
-        res.render('./listar/listarAluno', {alunos, dataEdicao, observacao});
+        const user = await User.findById(req.userId).lean();
+        if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
+          return res.status(400).redirect('https://http.cat/images/400.jpg');
+        }
+        let tipoUsuario = user.tipoUsuario;
+        let nome = user.nome;
+    
+        if(tipoUsuario == 'administrador'){
+          res.render('./listar/listarAluno', {layout: 'admin', alunos, dataEdicao, observacao} );
+        } 
+    
+        if(tipoUsuario != 'administrador'){
+          res.render('./listar/listarAluno', {layout: 'main', alunos, dataEdicao, observacao}, );
+        }
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
     }
 });
 
-app.get('/cadastroAluno', checkToken, (req, res) => {
-    res.render('cadastroAluno');
+app.get('/cadastroAluno', checkToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).lean();
+    if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
+      return res.status(400).redirect('https://http.cat/images/400.jpg');
+    }
+    let tipoUsuario = user.tipoUsuario;
+    let nome = user.nome;
+
+    if(tipoUsuario == 'administrador'){
+      res.render('cadastroAluno', {layout: 'admin'} );
+    } 
+
+    if(tipoUsuario != 'administrador'){
+      res.render('cadastroAluno', {layout: 'main'}, );
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.post('/cadastroAluno', checkToken, async (req, res) => {
@@ -296,10 +347,24 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
 
 app.get('/consultaAluno', checkToken, async (req, res) => {
     const aluno = require('./models/Aluno.js');
-    
+    const user = require('./models/User.js');
+
     try {
         let alunos = await aluno.find().sort({ativo : -1}).lean();
-        res.render('./consulta/consultaAluno', {alunos: alunos});
+        const user = await User.findById(req.userId).lean();
+        if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
+          return res.status(400).redirect('https://http.cat/images/400.jpg');
+        }
+        let tipoUsuario = user.tipoUsuario;
+        let nome = user.nome;
+    
+        if(tipoUsuario == 'administrador'){
+          res.render('./consulta/consultaAluno', {layout: 'admin',  alunos: alunos} );
+        } 
+    
+        if(tipoUsuario != 'administrador'){
+          res.render('./consulta/consultaAluno', {layout: 'main', alunos: alunos}, );
+        }
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
@@ -312,7 +377,20 @@ app.get('/editarAluno/:id', checkToken, async (req, res) => {
     try {
         let alunoEdit = await aluno.findById(id).lean();
         let observacao = alunoEdit.observacao ? alunoEdit.observacao.trim() : '';
-        res.render('./editar/editarAluno', {aluno: alunoEdit, observacao});
+        const user = await User.findById(req.userId).lean();
+        if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
+          return res.status(400).redirect('https://http.cat/images/400.jpg');
+        }
+        let tipoUsuario = user.tipoUsuario;
+        let nome = user.nome;
+
+        if(tipoUsuario == 'administrador'){
+          res.render('./editar/editarAluno', {layout: 'admin', aluno: alunoEdit, observacao} );
+        } 
+
+        if(tipoUsuario != 'administrador'){
+          res.render('./editar/editarAluno', {layout: 'main', aluno: alunoEdit, observacao} );
+        }
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
@@ -379,17 +457,32 @@ app.post('/controlaUsuario', checkToken, async (req, res) => {
 
 app.get('/perfil', checkToken, async (req, res) => {
    
-    try {
-        let usuario = require('./models/User.js');
-        usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
-        console.log(usuario);
-        res.render('meuPerfil', {usuario: usuario});
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
+  try {
+    const user = await User.findById(req.userId).lean();
+    if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
+      return res.status(400).redirect('https://http.cat/images/400.jpg');
     }
-});
+    let tipoUsuario = user.tipoUsuario;
+    let nome = user.nome;
 
+    let usuario = require('./models/User.js');
+    usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
+    console.log(usuario);
+
+    if(tipoUsuario == 'administrador'){
+      res.render('meuPerfil', {layout: 'admin', usuario: usuario});
+    } 
+
+    if(tipoUsuario != 'administrador'){
+      res.render('meuPerfil', {layout: 'main', usuario: usuario});
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+
+});
 
 app.listen(process.env.PORT, () => {
     console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
