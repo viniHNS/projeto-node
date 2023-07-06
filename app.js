@@ -130,7 +130,7 @@ app.post('/login', async (req, res) => {
 
     const token = jwt.sign({id: user._id}, secret);
     
-    res.cookie('auth-token', token, { httpOnly: true, expires: new Date(Date.now() + 900000)});
+    res.cookie('auth-token', token, { httpOnly: true, expires: new Date(Date.now() + 1800000)});
     res.redirect('/home');
   
   } catch (error) {
