@@ -79,9 +79,7 @@ app.get('/home', checkToken, async (req, res) => {
   
   try {
     const user = await User.findById(req.userId).lean();
-    if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
-      return res.status(400).redirect('https://http.cat/images/400.jpg');
-    }
+    
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
@@ -173,6 +171,8 @@ app.post('/register', async (req, res) => {
   if (userExists) {
     return res.status(422).send('<script>alert("Email já cadastrado"); window.location.href = "/login";</script>');
   }
+
+
     
   const salt = await bcrypt.genSalt(12);
   const passwordHash = await bcrypt.hash(password, salt);
@@ -181,6 +181,7 @@ app.post('/register', async (req, res) => {
     nome: nome,
     email: email,
     senha: passwordHash,
+    tipoUsuario: 'comum',
   });
 
   try {
@@ -195,9 +196,7 @@ app.post('/register', async (req, res) => {
 app.get('/ajuda', checkToken, async (req, res) => {
     try {
       const user = await User.findById(req.userId).lean();
-      if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
-        return res.status(400).redirect('https://http.cat/images/400.jpg');
-      }
+  
       let tipoUsuario = user.tipoUsuario;
       let nome = user.nome;
   
@@ -272,9 +271,7 @@ app.get('/listarAluno/:id', checkToken, async (req, res) => {
     try {
         let alunos = await aluno.findById(id).lean();
         const user = await User.findById(req.userId).lean();
-        if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
-          return res.status(400).redirect('https://http.cat/images/400.jpg');
-        }
+        
         let tipoUsuario = user.tipoUsuario;
         let nome = user.nome;
     
@@ -294,9 +291,7 @@ app.get('/listarAluno/:id', checkToken, async (req, res) => {
 app.get('/cadastroAluno', checkToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).lean();
-    if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
-      return res.status(400).redirect('https://http.cat/images/400.jpg');
-    }
+    
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
@@ -352,9 +347,7 @@ app.get('/consultaAluno', checkToken, async (req, res) => {
     try {
         let alunos = await aluno.find().sort({ativo : -1}).lean();
         const user = await User.findById(req.userId).lean();
-        if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
-          return res.status(400).redirect('https://http.cat/images/400.jpg');
-        }
+        
         let tipoUsuario = user.tipoUsuario;
         let nome = user.nome;
     
@@ -378,9 +371,7 @@ app.get('/editarAluno/:id', checkToken, async (req, res) => {
         let alunoEdit = await aluno.findById(id).lean();
         let observacao = alunoEdit.observacao ? alunoEdit.observacao.trim() : '';
         const user = await User.findById(req.userId).lean();
-        if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
-          return res.status(400).redirect('https://http.cat/images/400.jpg');
-        }
+        
         let tipoUsuario = user.tipoUsuario;
         let nome = user.nome;
 
@@ -459,9 +450,7 @@ app.get('/perfil', checkToken, async (req, res) => {
    
   try {
     const user = await User.findById(req.userId).lean();
-    if(user.tipoUsuario == '' || user.tipoUsuario == null){ 
-      return res.status(400).redirect('https://http.cat/images/400.jpg');
-    }
+    
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
