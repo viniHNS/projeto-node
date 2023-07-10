@@ -79,16 +79,17 @@ app.get('/home', checkToken, async (req, res) => {
   
   try {
     const user = await User.findById(req.userId).lean();
-    
+    const alunos = require('./models/Aluno.js');
+    const allAlunos = await alunos.find().lean();
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
     if(tipoUsuario == 'administrador'){
-      res.render('home', {nome, layout: 'admin'} );
+      res.render('home', {nome, layout: 'admin', allAlunos});
     } 
 
     if(tipoUsuario != 'administrador'){
-      res.render('home', {nome, layout: 'main'}, );
+      res.render('home', {nome, layout: 'main'});
     }
 
   } catch (error) {
