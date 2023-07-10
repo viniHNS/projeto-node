@@ -4,4 +4,123 @@
             <h1 class="text-center">Bem vindo, {{nome}}</h1>
         </div>
     </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="myChart2" width="400" height="400"></canvas>
+        </div>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('myChart');
+    let dados = Array({{#each allAlunos}}
+        "{{periodoEstudo}}", 
+    {{/each}})
+
+    let somentePeriodoManha = dados.filter((item) => {
+        return item == 'Manhã'
+    })
+
+    let somentePeriodoTarde = dados.filter((item) => {
+        return item == 'Tarde'
+    })
+
+    let somentePeriodoNoite = dados.filter((item) => {
+        return item == 'Noite'
+    })
+
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: ['Manhã', 'Tarde', 'Noite'],
+        datasets: [{
+            label: 'Número de alunos',
+            data: [somentePeriodoManha.length, somentePeriodoTarde.length, somentePeriodoNoite.length],
+            borderWidth: 1,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)', 
+                'rgba(255, 206, 86, 0.5)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)', 
+                'rgba(255, 206, 86, 1)'
+            ],
+        }]
+        },
+        options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            },
+
+            plugins: {
+                title: {
+                display: true,
+                text: 'Número de alunos por período'
+                }
+            },
+
+            animation: {
+                duration: 2000,
+                easing: 'easeInOutBounce'
+            }
+        }
+    });
+
+    const ctx2 = document.getElementById('myChart2');
+    let dados2 = Array({{#each allAlunos}}
+        "{{sexo}}", 
+    {{/each}})
+
+    let somenteSexoMasculino = dados2.filter((item) => {
+        return item == 'Masculino'
+    })
+
+    let somenteSexoFeminino = dados2.filter((item) => {
+        return item == 'Feminino'
+    })
+
+    new Chart(ctx2, {
+        type: 'pie',
+        data: {
+        labels: ['Masculino', 'Feminino'],
+        datasets: [{
+            label: 'Número de alunos',
+            data: [somenteSexoMasculino.length, somenteSexoFeminino.length],
+            borderWidth: 1,
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.5)', 
+                'rgba(255, 99, 132, 0.5)',
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)', 
+                'rgba(255, 99, 132, 1)',
+            ],
+        }]
+        },
+        options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            },
+
+            plugins: {
+                title: {
+                display: true,
+                text: 'Número de alunos por sexo'
+                }
+            }
+        }
+    });
+
+</script>
