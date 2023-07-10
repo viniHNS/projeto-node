@@ -457,7 +457,7 @@ app.get('/perfil', checkToken, async (req, res) => {
 
     let usuario = require('./models/User.js');
     usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
-    console.log(usuario);
+    
 
     if(tipoUsuario == 'administrador'){
       res.render('meuPerfil', {layout: 'admin', usuario: usuario});
