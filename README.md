@@ -82,7 +82,7 @@ Se você tiver alguma pergunta ou sugestão em relação a este projeto, sinta-s
 
 ## Checklist - To-Do
 
-Aqui estão algumas sugestões de melhorias e tarefas para o projeto:
+ Melhorias planejadas para o projeto:
 
 - [ ] Melhorar a interface de usuário (UI/UX)
 - [ ] Melhorar as rotas e organizar o código
