@@ -22,6 +22,7 @@ Este repositório contém um projeto Node.js Express que utiliza várias bibliot
 - Font Awesome
 - SweetAlert2
 - Vanilla Masker
+- Typed.js
 
 ## Configuração do ambiente
 
