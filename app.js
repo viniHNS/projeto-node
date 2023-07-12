@@ -67,6 +67,7 @@ function checkToken(req, res, next) {
     req.userId = decodedToken.id;
     next();
   } catch (error) {
+    console.error('Erro ao verificar token: ', error);
     return res.status(400).redirect('https://http.cat/images/400.jpg');
   }
 }
@@ -135,6 +136,7 @@ app.post('/login', async (req, res) => {
     res.redirect('/home');
   
   } catch (error) {
+    console.error('Erro ao gerar token: ', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 });
@@ -331,9 +333,7 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
     const aluno = require('./models/Aluno.js');
 
     try { 
-      const user = await User.findById(req.userId).lean();
-      let tipoUsuario = user.tipoUsuario;
-
+      
       if(!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !telefoneResponsavel || !emailResponsavel || !enderecoResponsavel){
         console.log("Preencha os campos obrigatórios");
       } else {
