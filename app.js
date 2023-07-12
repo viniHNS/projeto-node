@@ -440,9 +440,12 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
 
 app.get('/controlaUsuario', checkToken, async (req, res) => { 
     const usuario = require('./models/User.js');
+    const usuarioAtualID = req.userId;
     try {
-        let usuarios = await usuario.find().lean();
-        res.render('controlaUsuario', {usuarios: usuarios});
+      let usuarios = await usuario.find({ _id: { $ne: usuarioAtualID } })
+      .select('-senha -__v -createdAt -updatedAt')
+      .lean();
+      res.render('controlaUsuario', {usuarios: usuarios});
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
@@ -459,8 +462,7 @@ app.get('/perfil', checkToken, async (req, res) => {
     const user = await User.findById(req.userId).lean();
     
     let tipoUsuario = user.tipoUsuario;
-    let nome = user.nome;
-
+    
     let usuario = require('./models/User.js');
     usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
     
