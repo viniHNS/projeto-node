@@ -331,14 +331,20 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
     const aluno = require('./models/Aluno.js');
 
     try { 
-        await aluno.create({nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: {nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo}});
-        console.log('Dados inseridos com sucesso');
-        res.render('cadastroAluno');
-        
+      const user = await User.findById(req.userId).lean();
+      let tipoUsuario = user.tipoUsuario;
+
+      if(!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !telefoneResponsavel || !emailResponsavel || !enderecoResponsavel){
+        console.log("Preencha os campos obrigatórios");
+      } else {
+          await aluno.create({nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: {nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo}});
+          console.log('Dados inseridos com sucesso');
+          res.render('cadastroAluno', {layout: 'admin'});
+        }  
       } catch (error) {
-        console.error('Erro ao inserir dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');
-      }
+      console.error('Erro ao inserir dados:', error);
+      res.status(500).redirect('https://http.cat/images/500.jpg');
+    }
 });
 
 app.get('/consultaAluno', checkToken, async (req, res) => {

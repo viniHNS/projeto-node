@@ -63,6 +63,14 @@ Após iniciar o servidor, você poderá acessar o aplicativo em seu navegador us
 
 Certifique-se de ter um ambiente MongoDB em execução e atualize a variável `CONNECTION_STRING` no arquivo `.env` com a string de conexão correta.
 
+## Desenvolvimento com Codespace e Container Node.js
+
+Este projeto está sendo desenvolvido utilizando o Codespace, uma funcionalidade do GitHub que permite o desenvolvimento diretamente no navegador com um ambiente configurado. Além disso, está sendo utilizado um container Node.js para fornecer um ambiente consistente e isolado.
+
+Ao utilizar o Codespace e o container Node.js, você terá acesso a um ambiente de desenvolvimento pré-configurado com todas as dependências necessárias já instaladas, facilitando o processo de contribuição e desenvolvimento.
+
+Para iniciar o ambiente de desenvolvimento, siga as instruções do Codespace no repositório. Certifique-se de ter uma conexão estável com a internet para aproveitar todas as funcionalidades oferecidas pelo Codespace.
+
 ## Contribuição
 
 Se você deseja contribuir para este projeto, siga as etapas abaixo:
