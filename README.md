@@ -1,6 +1,6 @@
 # Projeto Node.js Express
 
-Este repositório contém um projeto Node.js Express que utiliza várias bibliotecas e tecnologias para criar um aplicativo web. O objetivo principal deste projeto é...
+Este repositório contém um projeto Node.js Express que utiliza várias bibliotecas e tecnologias para criar um aplicativo web. O objetivo principal deste projeto é realizar o cadastro de alunos e seus responsáveis em uma plataforma unificada, também é possivel realizar o controle de usuários cadastrados através de um painél administrativo.
 
 ## Tecnologias utilizadas
 
@@ -79,3 +79,18 @@ Este projeto está licenciado sob a MIT License. Consulte o arquivo `LICENSE` pa
 ## Contato
 
 Se você tiver alguma pergunta ou sugestão em relação a este projeto, sinta-se à vontade para entrar em contato através do meu discord: `bagreassalariado`
+
+## Checklist - To-Do
+
+Aqui estão algumas sugestões de melhorias e tarefas para o projeto:
+
+- [ ] Melhorar a interface de usuário (UI/UX)
+- [ ] Melhorar as rotas e organizar o código
+- [ ] Implementar autenticação com redes sociais (por exemplo, login com Google ou Facebook)
+- [ x ] Adicionar validação de formulários do lado do cliente e do servidor
+- [ ] Implementar um sistema de cache para melhorar o desempenho
+- [ ] Adicionar testes automatizados para garantir a qualidade do código
+- [ ] Melhorar a segurança da aplicação (por exemplo, adicionando proteção contra ataques de injeção de SQL ou XSS)
+- [ ] Implementar internacionalização (i18n) para suportar diferentes idiomas
+- [ ] Adicionar recursos de notificação por e-mail
+- [ ] Implementar um sistema de busca avançada
