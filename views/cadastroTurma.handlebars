@@ -10,8 +10,8 @@
         </div>
 
         <div class="input-periodo">
-            <label id="label-periodo" for="periodo-turma">Período<span style="color: red;">*</span></label>
-            <select name="periodo-turma" id="periodo-turma">
+            <label id="label-periodo" for="periodo_turma">Período<span style="color: red;">*</span></label>
+            <select name="periodo_turma" id="periodo_turma">
                 <option value="Manhã">Manhã</option>
                 <option value="Tarde">Tarde</option>
                 <option value="Noite">Noite</option>
@@ -26,6 +26,9 @@
         <div class="input-submit">
             <input type="submit" value="Cadastrar">
         </div>
-
     </form>
 </div>
+
+{{#if error}}
+    <script src="public/js/scriptCadastroTurma.js"></script>
+{{/if}}
