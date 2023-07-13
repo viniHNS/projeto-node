@@ -534,6 +534,14 @@ app.get('/cadastroTurma', checkToken, async (req, res) => {
   }
 })
 
+app.post('/cadastroTurma', checkToken, async (req, res) => {
+  const turma = require('./models/Turma.js');
+
+  let nomeTurma = req.body.turma;
+  let periodo = req.body.periodo-turma
+  let ativo = req.body.ativo
+})
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);

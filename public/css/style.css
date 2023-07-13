@@ -117,6 +117,29 @@ form{
     color: #333;
 }
 
+.input-periodo{
+    display: flex;
+    width: 10rem;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-perido label{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-periodo select{
+    height: 35px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
 
 .input-observacoes{
     display: flex;
