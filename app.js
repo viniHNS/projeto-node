@@ -56,7 +56,7 @@ conn();
 
 function checkToken(req, res, next) {
   const token = req.cookies['auth-token'];
-  
+
   if (!token) {
     return res.status(401).redirect('https://http.cat/images/401.jpg');
   }
@@ -75,7 +75,7 @@ function checkToken(req, res, next) {
 async function isAdmin(req, res, next) {
   try {
     const user = await User.findById(req.userId).lean();
-    
+
     if (user) {
       if (user.tipoUsuario === 'administrador') {
         next();
@@ -94,12 +94,12 @@ async function isAdmin(req, res, next) {
 
 }
 
-app.get('/',  (req, res) => {
+app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
 app.get('/home', checkToken, async (req, res) => {
-  
+
   try {
     const user = await User.findById(req.userId).lean();
     const alunos = require('./models/Aluno.js');
@@ -107,56 +107,56 @@ app.get('/home', checkToken, async (req, res) => {
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
-    if(tipoUsuario == 'administrador'){
-      res.render('home', {nome, layout: 'admin', allAlunos});
-    } 
+    if (tipoUsuario == 'administrador') {
+      res.render('home', { nome, layout: 'admin', allAlunos });
+    }
 
-    if(tipoUsuario != 'administrador'){
-      res.render('home', {nome, layout: 'main'});
+    if (tipoUsuario != 'administrador') {
+      res.render('home', { nome, layout: 'main' });
     }
 
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
-  
+
 });
 
 app.get('/login', (req, res) => {
-    res.render('login', {layout: 'login'});
+  res.render('login', { layout: 'login' });
 });
 
 app.post('/login', async (req, res) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
 
-  if(!email){
+  if (!email) {
     return res.status(422).send('<script>alert("Email não informado"); window.location.href = "/login";</script>');
   }
 
-  if(!password){
+  if (!password) {
     return res.status(422).send('<script>alert("Senha não informada"); window.location.href = "/login";</script>');
   }
 
-  const user = await User.findOne({email: email});
+  const user = await User.findOne({ email: email });
 
-  if(!user){
+  if (!user) {
     return res.status(404).send('<script>alert("Email não encontrado"); window.location.href = "/login";</script>');
   }
 
   const checkPassword = await bcrypt.compare(password, user.senha);
 
-  if(!checkPassword){
+  if (!checkPassword) {
     return res.status(404).send('<script>alert("Senha incorreta"); window.location.href = "/login";</script>');
   }
 
   try {
     const secret = process.env.SECRET;
 
-    const token = jwt.sign({id: user._id}, secret);
-    
-    res.cookie('auth-token', token, { httpOnly: true, expires: new Date(Date.now() + 1800000)});
+    const token = jwt.sign({ id: user._id }, secret);
+
+    res.cookie('auth-token', token, { httpOnly: true, expires: new Date(Date.now() + 1800000) });
     res.redirect('/home');
-  
+
   } catch (error) {
     console.error('Erro ao gerar token: ', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -169,36 +169,34 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('register', {layout: 'login'});
+  res.render('register', { layout: 'login' });
 });
 
 app.post('/register', async (req, res) => {
-  const {nome, email, password, password2} = req.body;
+  const { nome, email, password, password2 } = req.body;
 
-  if(!nome){
+  if (!nome) {
     return res.status(422).send('<script>alert("Nome não informado"); window.location.href = "/login";</script>');
   }
 
-  if(!email){
+  if (!email) {
     return res.status(422).send('<script>alert("Email não informado"); window.location.href = "/login";</script>');
   }
 
-  if(!password){
+  if (!password) {
     return res.status(422).send('<script>alert("Senha não informada"); window.location.href = "/login";</script>');
   }
 
-  if(password !== password2){
+  if (password !== password2) {
     return res.status(422).send('<script>alert("Senhas não conferem"); window.location.href = "/login";</script>');
   }
 
-  const userExists = await User.findOne({email: email});
+  const userExists = await User.findOne({ email: email });
 
   if (userExists) {
     return res.status(422).send('<script>alert("Email já cadastrado"); window.location.href = "/login";</script>');
   }
 
-
-    
   const salt = await bcrypt.genSalt(12);
   const passwordHash = await bcrypt.hash(password, salt);
 
@@ -219,113 +217,113 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/ajuda', checkToken, async (req, res) => {
-    try {
-      const user = await User.findById(req.userId).lean();
-  
-      let tipoUsuario = user.tipoUsuario;
-      let nome = user.nome;
-  
-      if(tipoUsuario == 'administrador'){
-        res.render('ajuda', {layout: 'admin'} );
-      } 
-  
-      if(tipoUsuario != 'administrador'){
-        res.render('ajuda', {layout: 'main'}, );
-      }
-  
-    } catch (error) {
-      console.error('Erro ao buscar dados:', error);
-      res.status(500).redirect('https://http.cat/images/500.jpg');
+  try {
+    const user = await User.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
+    let nome = user.nome;
+
+    if (tipoUsuario == 'administrador') {
+      res.render('ajuda', { layout: 'admin' });
     }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('ajuda', { layout: 'main' },);
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.post('/relatorio/aluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/Aluno.js');
-    let id = req.params.id;
-    try {
-        let alunos = await aluno.findById(id).lean();
-        
-        //geração do PDF
-        const doc = new pdfKit({ size: 'A4', margin: 50});
-        res.setHeader('Content-Type', 'application/pdf');
-        doc.pipe(res);
+  const aluno = require('./models/Aluno.js');
+  let id = req.params.id;
+  try {
+    let alunos = await aluno.findById(id).lean();
 
-        doc.font('Helvetica');
-        doc.fontSize(24).text('Informações do Formulário:', { align: 'center' , lineGap: 10});
-        doc.fontSize(18).moveDown().text(`Dados do aluno`, {lineGap: 10});
-        doc.fontSize(14).text(`Nome: ${alunos.nome}`, {lineGap: 10});
-        doc.fontSize(14).text(`Sexo: ${alunos.sexo}`, {lineGap: 10});
-        doc.fontSize(14).text(`Data de nascimento: ${alunos.data_nascimento}`, {lineGap: 10});
-        doc.fontSize(14).text(`Periodo em que estuda: ${alunos.periodoEstudo}`, {lineGap: 10});
-        doc.fontSize(14).text(`Observação: ${alunos.observacao}`, {lineGap: 10});
-        doc.fontSize(18).moveDown().text(`Dados do responsável`, {lineGap: 10});
-        doc.fontSize(14).text(`Nome: ${alunos.responsavel.nome}`, {lineGap: 10});
-        doc.fontSize(14).text(`Telefone: ${alunos.responsavel.telefone}`, {lineGap: 10});
-        doc.fontSize(14).text(`Email: ${alunos.responsavel.email}`, {lineGap: 10});
-        doc.fontSize(14).text(`Endereço: ${alunos.responsavel.endereco}`, {lineGap: 10});
-        doc.fontSize(14).text(`Ativo: ${alunos.ativo}`, {lineGap: 10});
-        
-        doc.end();
+    //geração do PDF
+    const doc = new pdfKit({ size: 'A4', margin: 50 });
+    res.setHeader('Content-Type', 'application/pdf');
+    doc.pipe(res);
 
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
-    }
+    doc.font('Helvetica');
+    doc.fontSize(24).text('Informações do Formulário:', { align: 'center', lineGap: 10 });
+    doc.fontSize(18).moveDown().text(`Dados do aluno`, { lineGap: 10 });
+    doc.fontSize(14).text(`Nome: ${alunos.nome}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Sexo: ${alunos.sexo}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Data de nascimento: ${alunos.data_nascimento}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Periodo em que estuda: ${alunos.periodoEstudo}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Observação: ${alunos.observacao}`, { lineGap: 10 });
+    doc.fontSize(18).moveDown().text(`Dados do responsável`, { lineGap: 10 });
+    doc.fontSize(14).text(`Nome: ${alunos.responsavel.nome}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Telefone: ${alunos.responsavel.telefone}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Email: ${alunos.responsavel.email}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Endereço: ${alunos.responsavel.endereco}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Ativo: ${alunos.ativo}`, { lineGap: 10 });
+
+    doc.end();
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.post('/deletarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/Aluno.js');
-    let id = req.params.id;
-    try {
-        await aluno.findByIdAndDelete(id);
-        res.redirect('/consultaAluno');
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
-    }
+  const aluno = require('./models/Aluno.js');
+  let id = req.params.id;
+  try {
+    await aluno.findByIdAndDelete(id);
+    res.redirect('/consultaAluno');
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.get('/listarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/Aluno.js');
-    let id = req.params.id;
-    let dataEdicao = await aluno.findById(id).select('updatedAt').lean();
-    let alunoData = await aluno.findById(id).select('observacao').lean();
-    let observacao = alunoData.observacao ? alunoData.observacao.trim() : '';
+  const aluno = require('./models/Aluno.js');
+  let id = req.params.id;
+  let dataEdicao = await aluno.findById(id).select('updatedAt').lean();
+  let alunoData = await aluno.findById(id).select('observacao').lean();
+  let observacao = alunoData.observacao ? alunoData.observacao.trim() : '';
 
-    dataEdicao = dataEdicao.updatedAt.toLocaleString('pt-BR');
-    try {
-        let alunos = await aluno.findById(id).lean();
-        const user = await User.findById(req.userId).lean();
-        
-        let tipoUsuario = user.tipoUsuario;
-        let nome = user.nome;
-    
-        if(tipoUsuario == 'administrador'){
-          res.render('./listar/listarAluno', {layout: 'admin', alunos, dataEdicao, observacao} );
-        } 
-    
-        if(tipoUsuario != 'administrador'){
-          res.render('./listar/listarAluno', {layout: 'main', alunos, dataEdicao, observacao}, );
-        }
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
+  dataEdicao = dataEdicao.updatedAt.toLocaleString('pt-BR');
+  try {
+    let alunos = await aluno.findById(id).lean();
+    const user = await User.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
+    let nome = user.nome;
+
+    if (tipoUsuario == 'administrador') {
+      res.render('./listar/listarAluno', { layout: 'admin', alunos, dataEdicao, observacao });
     }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('./listar/listarAluno', { layout: 'main', alunos, dataEdicao, observacao },);
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.get('/cadastroAluno', checkToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).lean();
-    
+
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
-    if(tipoUsuario == 'administrador'){
-      res.render('cadastroAluno', {layout: 'admin'} );
-    } 
+    if (tipoUsuario == 'administrador') {
+      res.render('cadastroAluno', { layout: 'admin' });
+    }
 
-    if(tipoUsuario != 'administrador'){
-      res.render('cadastroAluno', {layout: 'main'}, );
+    if (tipoUsuario != 'administrador') {
+      res.render('cadastroAluno', { layout: 'main' },);
     }
 
   } catch (error) {
@@ -335,163 +333,163 @@ app.get('/cadastroAluno', checkToken, async (req, res) => {
 });
 
 app.post('/cadastroAluno', checkToken, async (req, res) => {
-    let nome = req.body.nome;
-    let sexo = req.body.sexo;
-    let dataNascimento = req.body.dataNascimento;
-    let periodoEstudo = req.body.periodoEstudo;
-    let observacao = req.body.observacoes;
-    let nomeResponsavel = req.body.nomeResponsavel;
-    let telefoneResponsavel = req.body.telefoneResponsavel;
-    let emailResponsavel = req.body.emailResponsavel;
-    let enderecoResponsavel = req.body.enderecoResponsavel;
-    let ativo = req.body.ativo;
+  let nome = req.body.nome;
+  let sexo = req.body.sexo;
+  let dataNascimento = req.body.dataNascimento;
+  let periodoEstudo = req.body.periodoEstudo;
+  let observacao = req.body.observacoes;
+  let nomeResponsavel = req.body.nomeResponsavel;
+  let telefoneResponsavel = req.body.telefoneResponsavel;
+  let emailResponsavel = req.body.emailResponsavel;
+  let enderecoResponsavel = req.body.enderecoResponsavel;
+  let ativo = req.body.ativo;
 
-    if(ativo == 'on') {
-      ativo = true;
+  if (ativo == 'on') {
+    ativo = true;
+  } else {
+    ativo = false;
+  }
+
+  const aluno = require('./models/Aluno.js');
+
+  try {
+
+    if (!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !telefoneResponsavel || !emailResponsavel || !enderecoResponsavel) {
+      console.log("Preencha os campos obrigatórios");
     } else {
-      ativo = false;
+      await aluno.create({ nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: { nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo } });
+      console.log('Dados inseridos com sucesso');
+      res.render('cadastroAluno', { layout: 'admin' });
     }
-
-    const aluno = require('./models/Aluno.js');
-
-    try { 
-      
-      if(!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !telefoneResponsavel || !emailResponsavel || !enderecoResponsavel){
-        console.log("Preencha os campos obrigatórios");
-      } else {
-          await aluno.create({nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: {nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo}});
-          console.log('Dados inseridos com sucesso');
-          res.render('cadastroAluno', {layout: 'admin'});
-        }  
-      } catch (error) {
-      console.error('Erro ao inserir dados:', error);
-      res.status(500).redirect('https://http.cat/images/500.jpg');
-    }
+  } catch (error) {
+    console.error('Erro ao inserir dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.get('/consultaAluno', checkToken, async (req, res) => {
-    const aluno = require('./models/Aluno.js');
-    const user = require('./models/User.js');
+  const aluno = require('./models/Aluno.js');
+  const user = require('./models/User.js');
 
-    try {
-        let alunos = await aluno.find().sort({ativo : -1}).lean();
-        const user = await User.findById(req.userId).lean();
-        
-        let tipoUsuario = user.tipoUsuario;
-        let nome = user.nome;
-    
-        if(tipoUsuario == 'administrador'){
-          res.render('./consulta/consultaAluno', {layout: 'admin',  alunos: alunos} );
-        } 
-    
-        if(tipoUsuario != 'administrador'){
-          res.render('./consulta/consultaAluno', {layout: 'main', alunos: alunos}, );
-        }
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
+  try {
+    let alunos = await aluno.find().sort({ ativo: -1 }).lean();
+    const user = await User.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
+    let nome = user.nome;
+
+    if (tipoUsuario == 'administrador') {
+      res.render('./consulta/consultaAluno', { layout: 'admin', alunos: alunos });
     }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('./consulta/consultaAluno', { layout: 'main', alunos: alunos },);
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.get('/editarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/Aluno.js');
-    let id = req.params.id;
-    try {
-        let alunoEdit = await aluno.findById(id).lean();
-        let observacao = alunoEdit.observacao ? alunoEdit.observacao.trim() : '';
-        const user = await User.findById(req.userId).lean();
-        
-        let tipoUsuario = user.tipoUsuario;
-        let nome = user.nome;
+  const aluno = require('./models/Aluno.js');
+  let id = req.params.id;
+  try {
+    let alunoEdit = await aluno.findById(id).lean();
+    let observacao = alunoEdit.observacao ? alunoEdit.observacao.trim() : '';
+    const user = await User.findById(req.userId).lean();
 
-        if(tipoUsuario == 'administrador'){
-          res.render('./editar/editarAluno', {layout: 'admin', aluno: alunoEdit, observacao} );
-        } 
+    let tipoUsuario = user.tipoUsuario;
+    let nome = user.nome;
 
-        if(tipoUsuario != 'administrador'){
-          res.render('./editar/editarAluno', {layout: 'main', aluno: alunoEdit, observacao} );
-        }
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
+    if (tipoUsuario == 'administrador') {
+      res.render('./editar/editarAluno', { layout: 'admin', aluno: alunoEdit, observacao });
     }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('./editar/editarAluno', { layout: 'main', aluno: alunoEdit, observacao });
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.post('/editarAluno/:id', checkToken, async (req, res) => {
-    const aluno = require('./models/Aluno.js');
-    let id = req.params.id;
-    let nome = req.body.nome;
-    let sexo = req.body.sexo;
-    let dataNascimento = req.body.dataNascimento;
-    let periodoEstudo = req.body.periodoEstudo;
-    let observacao = req.body.observacoes;
-    observacao = observacao.trim();
+  const aluno = require('./models/Aluno.js');
+  let id = req.params.id;
+  let nome = req.body.nome;
+  let sexo = req.body.sexo;
+  let dataNascimento = req.body.dataNascimento;
+  let periodoEstudo = req.body.periodoEstudo;
+  let observacao = req.body.observacoes;
+  observacao = observacao.trim();
 
-    let nomeResponsavel = req.body.nomeResponsavel;
-    let telefoneResponsavel = req.body.telefoneResponsavel;
-    let emailResponsavel = req.body.emailResponsavel;
-    let enderecoResponsavel = req.body.enderecoResponsavel;
-    let ativo = req.body.ativo;
+  let nomeResponsavel = req.body.nomeResponsavel;
+  let telefoneResponsavel = req.body.telefoneResponsavel;
+  let emailResponsavel = req.body.emailResponsavel;
+  let enderecoResponsavel = req.body.enderecoResponsavel;
+  let ativo = req.body.ativo;
 
-    if(ativo == 'on') {
-        ativo = true;
-    } else {
-        ativo = false;
-    }
+  if (ativo == 'on') {
+    ativo = true;
+  } else {
+    ativo = false;
+  }
 
-    try {
-        let alunoEdit = await aluno.findById(id);
-        alunoEdit.nome = nome;
-        alunoEdit.sexo = sexo;
-        alunoEdit.data_nascimento = dataNascimento;
-        alunoEdit.periodoEstudo = periodoEstudo;
-        alunoEdit.observacao = observacao;
-        alunoEdit.responsavel.nome = nomeResponsavel;
-        alunoEdit.responsavel.telefone = telefoneResponsavel;
-        alunoEdit.responsavel.email = emailResponsavel;
-        alunoEdit.responsavel.endereco = enderecoResponsavel;
-        alunoEdit.ativo = ativo;
-        await alunoEdit.save();
-        res.redirect('/consultaAluno');
+  try {
+    let alunoEdit = await aluno.findById(id);
+    alunoEdit.nome = nome;
+    alunoEdit.sexo = sexo;
+    alunoEdit.data_nascimento = dataNascimento;
+    alunoEdit.periodoEstudo = periodoEstudo;
+    alunoEdit.observacao = observacao;
+    alunoEdit.responsavel.nome = nomeResponsavel;
+    alunoEdit.responsavel.telefone = telefoneResponsavel;
+    alunoEdit.responsavel.email = emailResponsavel;
+    alunoEdit.responsavel.endereco = enderecoResponsavel;
+    alunoEdit.ativo = ativo;
+    await alunoEdit.save();
+    res.redirect('/consultaAluno');
 
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
-    }
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
-app.get('/controlaUsuario', checkToken, isAdmin, async (req, res) => { 
-    
-    const usuario = require('./models/User.js');
-    const usuarioAtualID = req.userId;
-    try {
-      let usuarios = await usuario.find({ _id: { $ne: usuarioAtualID } })
+app.get('/controlaUsuario', checkToken, isAdmin, async (req, res) => {
+
+  const usuario = require('./models/User.js');
+  const usuarioAtualID = req.userId;
+  try {
+    let usuarios = await usuario.find({ _id: { $ne: usuarioAtualID } })
       .select('-senha -__v -createdAt -updatedAt')
       .lean();
-      res.render('controlaUsuario', {layout: 'admin'})
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        res.status(500).redirect('https://http.cat/images/500.jpg');    
-    }
+    res.render('controlaUsuario', { layout: 'admin' })
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 });
 
 app.get('/perfil', checkToken, async (req, res) => {
-   
+
   try {
     const user = await User.findById(req.userId).lean();
-    
+
     let tipoUsuario = user.tipoUsuario;
-    
+
     let usuario = require('./models/User.js');
     usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
-    
 
-    if(tipoUsuario == 'administrador'){
-      res.render('meuPerfil', {layout: 'admin', usuario: usuario});
-    } 
 
-    if(tipoUsuario != 'administrador'){
-      res.render('meuPerfil', {layout: 'main', usuario: usuario});
+    if (tipoUsuario == 'administrador') {
+      res.render('meuPerfil', { layout: 'admin', usuario: usuario });
+    }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('meuPerfil', { layout: 'main', usuario: usuario });
     }
 
   } catch (error) {
@@ -505,14 +503,14 @@ app.post('/deletarUsuario/:id', checkToken, isAdmin, async (req, res) => {
   const usuario = require('./models/User.js');
   let id = req.params.id;
   try {
-      await usuario.findByIdAndDelete(id);
-      res.redirect('/controlaUsuario');
+    await usuario.findByIdAndDelete(id);
+    res.redirect('/controlaUsuario');
   } catch (error) {
-      console.error('Erro ao buscar dados:', error);
-      res.status(500).redirect('https://http.cat/images/500.jpg');    
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
+  console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
 });
