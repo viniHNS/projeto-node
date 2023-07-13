@@ -76,16 +76,22 @@ async function isAdmin(req, res, next) {
   try {
     const user = await User.findById(req.userId).lean();
     
-    if (user.tipoUsuario === 'administrador') {
-      next();
+    if (user) {
+      if (user.tipoUsuario === 'administrador') {
+        next();
+      } else {
+        console.error('Você não possui os privilégios necessários');
+        res.status(401).redirect('https://http.cat/images/401.jpg');
+      }
     } else {
-      console.error('Você não possui os privilégios necessários');
-      res.status(401).redirect('https://http.cat/images/401.jpg');
+      console.error('Usuário não encontrado');
+      res.status(404).redirect('https://http.cat/images/404.jpg');
     }
   } catch (error) {
     console.error('Erro ao verificar privilégios do usuário:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
+
 }
 
 app.get('/',  (req, res) => {
