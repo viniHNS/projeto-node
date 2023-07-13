@@ -520,14 +520,14 @@ app.get('/cadastroTurma', checkToken, async (req, res) => {
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
-    if(tipoUsuario == 'administrador'){
+    if (tipoUsuario == 'administrador') {
       res.render('cadastroTurma', { layout: 'admin' });
     }
 
-    if(tipoUsuario != 'administrador'){
-      res.render('cadastroTurma', {layout: 'main'});
+    if (tipoUsuario != 'administrador') {
+      res.render('cadastroTurma', { layout: 'main' });
     }
-    
+
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -536,10 +536,43 @@ app.get('/cadastroTurma', checkToken, async (req, res) => {
 
 app.post('/cadastroTurma', checkToken, async (req, res) => {
   const turma = require('./models/Turma.js');
-
-  let nomeTurma = req.body.turma;
-  let periodo = req.body.periodo-turma
+  const user = await User.findById(req.userId).lean();
+  let tipoUsuario = user.tipoUsuario;
+  
+  let nome = req.body.nome;
+  let periodo = req.body.periodo_turma
   let ativo = req.body.ativo
+  if (ativo == 'on') {
+    ativo = true;
+  } else {
+    ativo = false;
+  }
+
+  console.log(tipoUsuario);
+
+  try {
+    
+    const turmaExistente = await turma.findOne({ nome: nome, periodo: periodo }).lean();
+
+    if (turmaExistente) {
+      console.error('Já existe uma turma com o mesmo nome e período');
+      return res.render('cadastroTurma', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', error: 'Já existe uma turma com o mesmo nome e período' });
+    }
+
+    await turma.create({ nome: nome, periodo: periodo, ativo: ativo });
+    console.log('Dados da Turma inseridos com sucesso');
+
+    if (tipoUsuario == 'administrador') {
+      res.render('cadastroTurma', { layout: 'admin' });
+    }
+    if (tipoUsuario != 'administrador') {
+      res.render('cadastroTurma', { layout: 'main' });
+    }
+
+  } catch (error) {
+    console.error('Erro ao inserir dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
 })
 
 

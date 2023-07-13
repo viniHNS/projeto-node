@@ -91,7 +91,7 @@ Este projeto está licenciado sob a MIT License. Consulte o arquivo `LICENSE` pa
 
 Se você tiver alguma pergunta ou sugestão em relação a este projeto, sinta-se à vontade para entrar em contato através do meu discord: `bagreassalariado`
 
-## Checklist - To-Do
+## Checklist -> To-Do
 
  Melhorias planejadas para o projeto:
 
