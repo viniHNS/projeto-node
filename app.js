@@ -72,6 +72,22 @@ function checkToken(req, res, next) {
   }
 }
 
+async function isAdmin(req, res, next) {
+  try {
+    const user = await User.findById(req.userId).lean();
+    
+    if (user.tipoUsuario === 'administrador') {
+      next();
+    } else {
+      console.error('Você não possui os privilégios necessários');
+      res.status(401).redirect('https://http.cat/images/401.jpg');
+    }
+  } catch (error) {
+    console.error('Erro ao verificar privilégios do usuário:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+}
+
 app.get('/',  (req, res) => {
   res.redirect('/login');
 });
@@ -438,22 +454,19 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
     }
 });
 
-app.get('/controlaUsuario', checkToken, async (req, res) => { 
+app.get('/controlaUsuario', checkToken, isAdmin, async (req, res) => { 
+    
     const usuario = require('./models/User.js');
     const usuarioAtualID = req.userId;
     try {
       let usuarios = await usuario.find({ _id: { $ne: usuarioAtualID } })
       .select('-senha -__v -createdAt -updatedAt')
       .lean();
-      res.render('controlaUsuario', {usuarios: usuarios});
+      res.render('controlaUsuario', {layout: 'admin'})
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         res.status(500).redirect('https://http.cat/images/500.jpg');    
     }
-});
-
-app.post('/controlaUsuario', checkToken, async (req, res) => {
-
 });
 
 app.get('/perfil', checkToken, async (req, res) => {
@@ -480,6 +493,18 @@ app.get('/perfil', checkToken, async (req, res) => {
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 
+});
+
+app.post('/deletarUsuario/:id', checkToken, isAdmin, async (req, res) => {
+  const usuario = require('./models/User.js');
+  let id = req.params.id;
+  try {
+      await usuario.findByIdAndDelete(id);
+      res.redirect('/controlaUsuario');
+  } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+      res.status(500).redirect('https://http.cat/images/500.jpg');    
+  }
 });
 
 app.listen(process.env.PORT, () => {
