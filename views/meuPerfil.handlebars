@@ -1,10 +1,20 @@
 <h1 class="text-center mt-5">Perfil</h1>
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <p class="text-center mt-5">{{usuario.nome}}</p>
-            <p class="text-center">{{usuario.email}}</p>
-            <p class="text-center">{{usuario.tipoUsuario}}</p>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Perfil</h3>
         </div>
+        <div class="card-body">
+          <h5 class="card-title">Nome</h5>
+          <p class="card-text">{{usuario.nome}}</p>
+          <h5 class="card-title">Email</h5>
+          <p class="card-text">{{usuario.email}}</p>
+          <h5 class="card-title">Tipo de usuário</h5>
+          <p class="card-text">{{usuario.tipoUsuario}}</p>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

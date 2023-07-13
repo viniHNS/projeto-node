@@ -38,6 +38,11 @@ const alunoSchema = new Schema({
         type: String,
     },
 
+    turma: {
+        type: Schema.Types.ObjectId,
+        ref: 'Turma',
+    },
+
     ativo: {
         type: Boolean,
         default: true,

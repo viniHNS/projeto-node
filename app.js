@@ -337,6 +337,7 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
   let sexo = req.body.sexo;
   let dataNascimento = req.body.dataNascimento;
   let periodoEstudo = req.body.periodoEstudo;
+  let serieEstuda = req.body.turma;
   let observacao = req.body.observacoes;
   let nomeResponsavel = req.body.nomeResponsavel;
   let telefoneResponsavel = req.body.telefoneResponsavel;
@@ -354,7 +355,7 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
 
   try {
 
-    if (!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !telefoneResponsavel || !emailResponsavel || !enderecoResponsavel) {
+    if (!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !telefoneResponsavel || !emailResponsavel || !enderecoResponsavel || !periodoEstudo) {
       console.log("Preencha os campos obrigatórios");
     } else {
       await aluno.create({ nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: { nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo } });
@@ -463,11 +464,11 @@ app.get('/controlaUsuario', checkToken, isAdmin, async (req, res) => {
   const usuario = require('./models/User.js');
   const usuarioAtualID = req.userId;
   try {
-    
+
     let usuarios = await usuario.find({ _id: { $ne: usuarioAtualID } })
-    .select('-senha -__v -createdAt -updatedAt')
-    .lean();
-    res.render('controlaUsuario', { layout: 'admin', usuarios: usuarios})
+      .select('-senha -__v -createdAt -updatedAt')
+      .lean();
+    res.render('controlaUsuario', { layout: 'admin', usuarios: usuarios })
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -511,6 +512,28 @@ app.post('/deletarUsuario/:id', checkToken, isAdmin, async (req, res) => {
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 });
+
+app.get('/cadastroTurma', checkToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
+    let nome = user.nome;
+
+    if(tipoUsuario == 'administrador'){
+      res.render('cadastroTurma', { layout: 'admin' });
+    }
+
+    if(tipoUsuario != 'administrador'){
+      res.render('cadastroTurma', {layout: 'main'});
+    }
+    
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+})
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
