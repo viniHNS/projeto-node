@@ -562,7 +562,7 @@ app.post('/deletarUsuario/:id', checkToken, isAdmin, async (req, res) => {
   }
 });
 
-app.get('/cadastroTurma', checkToken, async (req, res) => {
+app.get('/cadastroTurma', checkToken, isAdmin, async (req, res) => {
   try {
     const user = await User.findById(req.userId).lean();
 
@@ -577,7 +577,7 @@ app.get('/cadastroTurma', checkToken, async (req, res) => {
   }
 })
 
-app.post('/cadastroTurma', checkToken, async (req, res) => {
+app.post('/cadastroTurma', checkToken, isAdmin, async (req, res) => {
   const turma = require('./models/Turma.js');
   const user = await User.findById(req.userId).lean();
   let tipoUsuario = user.tipoUsuario;
@@ -615,6 +615,28 @@ app.post('/cadastroTurma', checkToken, async (req, res) => {
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 })
+
+app.get('/consultaTurma', checkToken, isAdmin, async (req, res) => {
+  const turma = require('./models/Turma.js');
+  const aluno = require('./models/Aluno.js');
+
+  try {
+    let turmas = await turma.find().lean();
+
+    for (let i = 0; i < turmas.length; i++) {
+      let turmaId = turmas[i]._id;
+
+      let quantidadeAlunos = await aluno.countDocuments({ 'turma.id': turmaId });
+
+      turmas[i].quantidadeAlunos = quantidadeAlunos;
+    }
+
+    res.render('consulta/consultaTurma', { layout: 'admin', turmas: turmas });
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
