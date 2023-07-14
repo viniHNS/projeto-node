@@ -25,11 +25,11 @@
                         <a href="/editarAluno/{{this._id}}" data-bs-toggle="popover" data-bs-content="Editar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-pen"></i></a>
                          <form class="form-relatorio" action="/relatorio/aluno/{{this._id}}" method="post">
                             <input type="hidden" name="_method" value="delete">
-                            <button type="submit" id="btn-relatorio" data-bs-toggle="popover" data-bs-content="Gerar Relatório" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-clipboard" style="color:aquamarine"></i></button>
+                            <button style="background-color: rgba(0, 0, 0, 0.01);" type="submit" id="btn-relatorio" data-bs-toggle="popover" data-bs-content="Gerar Relatório" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-clipboard" style="color:rgb(96, 196, 163)"></i></button>
                         </form>
                         <form class="form-consulta" action="/deletarAluno/{{this._id}}" method="post">
                             <input type="hidden" name="_method" value="delete">
-                            <button type="submit" id="btn-deletar" data-bs-toggle="popover" data-bs-content="Deletar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-trash" style="color: red;"></i></button>
+                            <button style="background-color: rgba(0, 0, 0, 0.01);" type="submit" id="btn-deletar" data-bs-toggle="popover" data-bs-content="Deletar Registro" data-bs-trigger="hover" data-bs-placement="top"><i class="fa-solid fa-trash" style="color: red;"></i></button>
                         </form>
                     </td>
                 </tr>
