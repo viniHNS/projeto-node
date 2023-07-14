@@ -16,6 +16,8 @@
     "dev": "nodemon app.js -e js,hbs,handlebars,css,json,html"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.22"
   },
   "type": "commonjs"

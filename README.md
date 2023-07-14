@@ -91,7 +91,7 @@ Este projeto está licenciado sob a MIT License. Consulte o arquivo `LICENSE` pa
 
 Se você tiver alguma pergunta ou sugestão em relação a este projeto, sinta-se à vontade para entrar em contato através do meu discord: `bagreassalariado`
 
-## Checklist - To-Do
+## Checklist -> To-Do
 
  Melhorias planejadas para o projeto:
 
@@ -100,6 +100,6 @@ Se você tiver alguma pergunta ou sugestão em relação a este projeto, sinta-s
 - ~~Adicionar validação de formulários do lado do cliente e do servidor~~  ***OK***
 - Implementar um sistema de cache para melhorar o desempenho
 - Adicionar testes automatizados para garantir a qualidade do código
-- Melhorar a segurança da aplicação (por exemplo, adicionando proteção contra ataques de injeção de SQL ou XSS)
+- ~~Melhorar a segurança da aplicação (por exemplo, adicionando proteção contra ataques de injeção de SQL ou XSS)~~ ***MAYBE OK***
 - Adicionar recursos de notificação por e-mail
 - Implementar um sistema de busca avançada
