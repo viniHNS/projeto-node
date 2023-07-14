@@ -418,7 +418,7 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
       console.log("Preencha os campos obrigatórios");
     } else {
       await aluno.create({ nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: { nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo } });
-      console.log('Dados inseridos com sucesso');
+      console.log('Dados do aluno inseridos com sucesso');
       res.render('cadastroAluno', { layout: 'admin' });
     }
   } catch (error) {
@@ -606,8 +606,6 @@ app.post('/cadastroTurma', checkToken, async (req, res) => {
   } else {
     ativo = false;
   }
-
-  console.log(tipoUsuario);
 
   try {
     
