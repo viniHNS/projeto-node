@@ -221,14 +221,73 @@ app.get('/ajuda', checkToken, async (req, res) => {
     const user = await User.findById(req.userId).lean();
 
     let tipoUsuario = user.tipoUsuario;
-    let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('ajuda', { layout: 'admin' });
+      res.render('ajuda/ajuda', { layout: 'admin' });
     }
 
     if (tipoUsuario != 'administrador') {
-      res.render('ajuda', { layout: 'main' },);
+      res.render('ajuda/ajuda', { layout: 'main' });
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.get('/ajuda/ajudaCadastroAluno', checkToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
+    
+    if (tipoUsuario == 'administrador') {
+      res.render('ajuda/ajudaCadastroAluno', { layout: 'admin' });
+    }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('ajuda/ajudaCadastroAluno', { layout: 'main' });
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.get('/ajuda/ajudaConsultaAluno', checkToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
+
+    if (tipoUsuario == 'administrador') {
+      res.render('ajuda/ajudaConsultaAluno', { layout: 'admin' });
+    }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('ajuda/ajudaConsultaAluno', { layout: 'main' });
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.get('/ajuda/ajudaAulas', checkToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
+
+    if (tipoUsuario == 'administrador') {
+      res.render('ajuda/ajudaAulas', { layout: 'admin' });
+    }
+
+    if (tipoUsuario != 'administrador') {
+      res.render('ajuda/ajudaAulas', { layout: 'main' });
     }
 
   } catch (error) {
