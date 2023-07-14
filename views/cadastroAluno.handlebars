@@ -31,11 +31,9 @@
         <div class="input-turma">
             <label id="label-turma" for="turma">Turma<span style="color: red;">*</span></label>
             <select name="turma" id="turma">
-                <option value="1">1º Ano</option>
-                <option value="2">2º Ano</option>
-                <option value="3">3º Ano</option>
-                <option value="4">4º Ano</option>
-                <option value="5">5º Ano</option>
+                {{#each turmas}}
+                    <option value="{{this.nome}} - {{this.periodo}}">{{this.nome}} - {{this.periodo}}</option>
+                {{/each}}
             </select>
         </div>
 
@@ -61,7 +59,7 @@
             <input type="email" name="emailResponsavel" id="emailResponsavel">
         </div>
         <div class="input-endereco-responsavel">
-            <label for="enderecoResponsavel">Endereço do Responsável</label>
+            <label for="enderecoResponsavel">Endereço do Responsável<span style="color: red;">*</span></label>
             <input type="text" name="enderecoResponsavel" id="enderecoResponsavel">
         </div>
         <div class="input-ativo">

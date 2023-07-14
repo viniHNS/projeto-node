@@ -22,12 +22,19 @@
         </div>
     
         <div class="input-periodo-estuda">
-        <label id="label-periodoEstudo" for="periodoEstudo">Período que estuda<span style="color: red;">*</span></label>
-        <select name="periodoEstudo" id="periodoEstudo" disabled>
-            <option value="Manhã" {{#ifCond alunos.periodoEstudo "==" "Manhã"}}selected{{/ifCond}}>Manhã</option>
-            <option value="Tarde" {{#ifCond alunos.periodoEstudo "==" "Tarde"}}selected{{/ifCond}}>Tarde</option>
-            <option value="Noite" {{#ifCond alunos.periodoEstudo "==" "Noite"}}selected{{/ifCond}}>Noite</option>
-        </select>
+            <label id="label-periodoEstudo" for="periodoEstudo">Período que estuda<span style="color: red;">*</span></label>
+            <select name="periodoEstudo" id="periodoEstudo" disabled>
+                <option value="Manhã" {{#ifCond alunos.periodoEstudo "==" "Manhã"}}selected{{/ifCond}}>Manhã</option>
+                <option value="Tarde" {{#ifCond alunos.periodoEstudo "==" "Tarde"}}selected{{/ifCond}}>Tarde</option>
+                <option value="Noite" {{#ifCond alunos.periodoEstudo "==" "Noite"}}selected{{/ifCond}}>Noite</option>
+            </select>
+        </div>
+
+        <div class="input-turma">
+            <label id="label-turma" for="turma">Turma<span style="color: red;">*</span></label>
+            <select name="turma" id="turma" disabled>
+                <option value="{{alunos.turma.nome}}" selected>{{alunos.turma.nome}}</option>
+            </select>
         </div>
 
         <div class="input-observacoes">

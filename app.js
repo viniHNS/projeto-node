@@ -52,7 +52,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-conn();
+conn(); //faz a conexão com o banco de dados
 
 function checkToken(req, res, next) {
   const token = req.cookies['auth-token'];
@@ -119,7 +119,6 @@ app.get('/home', checkToken, async (req, res) => {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
-
 });
 
 app.get('/login', (req, res) => {
@@ -354,12 +353,13 @@ app.get('/listarAluno/:id', checkToken, async (req, res) => {
 app.get('/cadastroAluno', checkToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).lean();
+    const turma = require('./models/Turma.js');
 
+    let turmas = await turma.find().lean();
     let tipoUsuario = user.tipoUsuario;
-    let nome = user.nome;
-
+    
     if (tipoUsuario == 'administrador') {
-      res.render('cadastroAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
+      res.render('cadastroAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' , turmas});
     }
 
   } catch (error) {
@@ -388,13 +388,25 @@ app.post('/cadastroAluno', checkToken, async (req, res) => {
   }
 
   const aluno = require('./models/Aluno.js');
+  const turma = require('./models/Turma.js');
 
   try {
+    serieEstuda = serieEstuda.trim();
+    let seriePartes = serieEstuda.split(' - ');
+    let SerieprimeiraParte = seriePartes[0];
+    let SeriesegundaParte = seriePartes[1];
 
-    if (!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !telefoneResponsavel || !emailResponsavel || !enderecoResponsavel || !periodoEstudo) {
+
+    let dadosTurma = await turma.findOne({nome: SerieprimeiraParte, periodo: SeriesegundaParte}).lean();
+    
+    console.group('Dados do aluno: ', serieEstuda, dadosTurma);
+
+    if (!nome || !sexo || !dataNascimento || !periodoEstudo || !nomeResponsavel || !enderecoResponsavel || !periodoEstudo) {
       console.log("Preencha os campos obrigatórios");
     } else {
-      await aluno.create({ nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: { nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo } });
+  
+      await aluno.create({ nome: nome, data_nascimento: dataNascimento, sexo: sexo, periodoEstudo: periodoEstudo, observacao: observacao, responsavel: { nome: nomeResponsavel, telefone: telefoneResponsavel, email: emailResponsavel, endereco: enderecoResponsavel, ativo: ativo}, turma: {id: dadosTurma._id, nome: dadosTurma.nome + " " + dadosTurma.periodo} });
+
       console.log('Dados do aluno inseridos com sucesso');
       res.render('cadastroAluno', { layout: 'admin' });
     }
@@ -427,9 +439,11 @@ app.get('/consultaAluno', checkToken, async (req, res) => {
 
 app.get('/editarAluno/:id', checkToken, async (req, res) => {
   const aluno = require('./models/Aluno.js');
+  const turma = require('./models/Turma.js');
   let id = req.params.id;
   try {
     let alunoEdit = await aluno.findById(id).lean();
+    let turmas = await turma.find().lean();
     let observacao = alunoEdit.observacao ? alunoEdit.observacao.trim() : '';
     const user = await User.findById(req.userId).lean();
 
@@ -437,7 +451,7 @@ app.get('/editarAluno/:id', checkToken, async (req, res) => {
     let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('./editar/editarAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', aluno: alunoEdit, observacao });
+      res.render('./editar/editarAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', aluno: alunoEdit, observacao, turmas});
     }
 
   } catch (error) {
@@ -448,12 +462,14 @@ app.get('/editarAluno/:id', checkToken, async (req, res) => {
 
 app.post('/editarAluno/:id', checkToken, async (req, res) => {
   const aluno = require('./models/Aluno.js');
+  const turma = require('./models/Turma.js');
   let id = req.params.id;
   let nome = req.body.nome;
   let sexo = req.body.sexo;
   let dataNascimento = req.body.dataNascimento;
   let periodoEstudo = req.body.periodoEstudo;
   let observacao = req.body.observacoes;
+  let turmaEstuda = req.body.turma;
   observacao = observacao.trim();
 
   let nomeResponsavel = req.body.nomeResponsavel;
@@ -469,11 +485,18 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
   }
 
   try {
+    let seriePartes = turmaEstuda.split(' - ');
+    let SerieprimeiraParte = seriePartes[0];
+    let SeriesegundaParte = seriePartes[1];
+    let achaTurma = await turma.findOne({nome: SerieprimeiraParte, periodo: SeriesegundaParte}).lean();
+
     let alunoEdit = await aluno.findById(id);
     alunoEdit.nome = nome;
     alunoEdit.sexo = sexo;
     alunoEdit.data_nascimento = dataNascimento;
     alunoEdit.periodoEstudo = periodoEstudo;
+    alunoEdit.turma.id = achaTurma._id;
+    alunoEdit.turma.nome = achaTurma.nome + " " + achaTurma.periodo;
     alunoEdit.observacao = observacao;
     alunoEdit.responsavel.nome = nomeResponsavel;
     alunoEdit.responsavel.telefone = telefoneResponsavel;
@@ -481,6 +504,8 @@ app.post('/editarAluno/:id', checkToken, async (req, res) => {
     alunoEdit.responsavel.endereco = enderecoResponsavel;
     alunoEdit.ativo = ativo;
     await alunoEdit.save();
+
+    console.log('Dados do aluno atualizados com sucesso');
     res.redirect('/consultaAluno');
 
   } catch (error) {
