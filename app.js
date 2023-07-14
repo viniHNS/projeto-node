@@ -103,16 +103,22 @@ app.get('/home', checkToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).lean();
     const alunos = require('./models/Aluno.js');
+
+    const dataHoje = new Date().toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+    const dataAniversario = new Date(user.dataNascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
+    
+    const isAniversario = dataHoje == dataAniversario ? true : false;
+
     const allAlunos = await alunos.find().lean();
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('home', { nome, layout: 'admin', allAlunos });
+      res.render('home', { nome, layout: 'admin', allAlunos, isAniversario });
     }
 
     if (tipoUsuario != 'administrador') {
-      res.render('home', { nome, layout: 'main' });
+      res.render('home', { nome, layout: 'main', isAniversario });
     }
 
   } catch (error) {
@@ -172,7 +178,7 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-  const { nome, email, password, password2 } = req.body;
+  const { nome, email, password, password2, dataNascimento } = req.body;
 
   if (!nome) {
     return res.status(422).send('<script>alert("Nome não informado"); window.location.href = "/login";</script>');
@@ -203,6 +209,7 @@ app.post('/register', async (req, res) => {
     nome: nome,
     email: email,
     senha: passwordHash,
+    dataNascimento: dataNascimento,
     tipoUsuario: 'comum',
   });
 
@@ -700,6 +707,22 @@ app.post('/deletarTurma/:id', checkToken, isAdmin, async (req, res) => {
     res.redirect('/consultaTurma');
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.get('/editarAluno/:id', checkToken, isAdmin, async (req, res) => {
+  const aluno = require('./models/Aluno.js');
+  const turma = require('./models/Turma.js');
+  let id = req.params.id;
+
+  try {
+    let alunos = await aluno.findById(id).lean();
+    let turmas = await turma.find().lean();
+
+    res.render('editar/editarAluno', { layout: 'admin', alunos: alunos, turmas: turmas});
+  } catch (error) {
+    console.error('Erro ao buscar dados do aluno: ', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 });
