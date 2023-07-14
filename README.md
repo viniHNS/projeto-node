@@ -23,6 +23,7 @@ Este repositório contém um projeto Node.js Express que utiliza várias bibliot
 - SweetAlert2
 - Vanilla Masker
 - Typed.js
+- tsParticles
 
 ## Configuração do ambiente
 
