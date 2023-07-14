@@ -422,11 +422,11 @@ app.get('/consultaAluno', checkToken, async (req, res) => {
   const user = require('./models/User.js');
 
   try {
-    let alunos = await aluno.find().sort({ ativo: -1 }).lean();
+    let alunos = await aluno.find().sort({ ativo: -1, turma: 1 }).lean();
     const user = await User.findById(req.userId).lean();
 
     let tipoUsuario = user.tipoUsuario;
-    let nome = user.nome;
+    
 
     if (tipoUsuario == 'administrador') {
       res.render('./consulta/consultaAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', alunos: alunos });
@@ -621,7 +621,7 @@ app.get('/consultaTurma', checkToken, isAdmin, async (req, res) => {
   const aluno = require('./models/Aluno.js');
 
   try {
-    let turmas = await turma.find().lean();
+    let turmas = await turma.find().sort({periodo: 1}).lean();
 
     for (let i = 0; i < turmas.length; i++) {
       let turmaId = turmas[i]._id;
@@ -632,6 +632,72 @@ app.get('/consultaTurma', checkToken, isAdmin, async (req, res) => {
     }
 
     res.render('consulta/consultaTurma', { layout: 'admin', turmas: turmas });
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.get('/listarTurma/:id', checkToken, isAdmin, async (req, res) => {
+  const turma = require('./models/Turma.js');
+  const aluno = require('./models/Aluno.js');
+
+  let id = req.params.id;
+  try {
+    let turmas = await turma.findById(id).lean();
+    let alunos = await aluno.find({ 'turma.id': id }).lean();
+    res.render('listar/listarTurma', { layout: 'admin', turmas: turmas,  alunos: alunos });
+  } catch (error) {
+    console.error('Erro ao buscar dados da turma: ', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.get('/editarTurma/:id', checkToken, isAdmin, async (req, res) => {
+  const turma = require('./models/Turma.js');
+  let id = req.params.id;
+
+  try {
+    let turmas = await turma.findById(id).lean();
+
+    res.render('editar/editarTurma', { layout: 'admin', turmas: turmas});
+  } catch (error) {
+    console.error('Erro ao buscar dados da turma: ', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.post('/editarTurma/:id', checkToken, isAdmin, async (req, res) => {
+  const turma = require('./models/Turma.js');
+  let id = req.params.id;
+
+  let nome = req.body.nome;
+  let periodo = req.body.periodo_turma
+  let ativo = req.body.ativo
+  if (ativo == 'on') {
+    ativo = true;
+  } else {
+    ativo = false;
+  }
+
+  try {
+    await turma.findByIdAndUpdate(id, { nome: nome, periodo: periodo, ativo: ativo });
+    console.log('Dados da Turma atualizados com sucesso')
+    res.redirect('/consultaTurma');
+  } catch (error) {
+    console.error('Erro ao buscar dados da turma: ', error);
+    res.status(500).redirect('https://http.cat/images/500.jpg');
+  }
+});
+
+app.post('/deletarTurma/:id', checkToken, isAdmin, async (req, res) => {
+  const turma = require('./models/Turma.js');
+  let id = req.params.id;
+
+  try {
+    await turma.findByIdAndDelete(id);
+    console.log('Turma deletada com sucesso')
+    res.redirect('/consultaTurma');
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');

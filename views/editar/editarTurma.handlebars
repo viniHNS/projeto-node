@@ -1,0 +1,29 @@
+<div class="container">
+    <form action="/editarTurma/{{turmas._id}}" method="post">
+        <h3 style="text-align: center; font-weight: bold;">Dados da turma</h3>
+        <hr>
+
+        <div class="input-nome">
+            <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
+            <input type="text" name="nome" id="nome" value="{{turmas.nome}}">
+        </div>
+
+        <div class="input-periodo">
+            <label id="label-periodo" for="periodo_turma">Período<span style="color: red;">*</span></label>
+            <select name="periodo_turma" id="periodo_turma">
+              <option value="Manhã" {{#ifCond turmas.periodo "==" "Manhã"}}selected{{/ifCond}}>Manhã</option>
+              <option value="Tarde" {{#ifCond turmas.periodo "==" "Tarde"}}selected{{/ifCond}}>Tarde</option>
+              <option value="Noite" {{#ifCond turmas.periodo "==" "Noite"}}selected{{/ifCond}}>Noite</option>
+            </select>
+        </div>
+
+        <div class="input-ativo">
+            <label for="ativo">Ativo</label>
+            <input type="checkbox" name="ativo" id="ativo" {{#if turmas.ativo}} checked {{else}} {{/if}}>
+        </div>
+
+        <div class="input-submit">
+            <input type="submit" value="Alterar">
+        </div>
+    </form>
+</div>
