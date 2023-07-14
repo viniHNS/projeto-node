@@ -297,7 +297,8 @@ app.post('/relatorio/aluno/:id', checkToken, async (req, res) => {
     doc.fontSize(14).text(`Sexo: ${alunos.sexo}`, { lineGap: 10 });
     doc.fontSize(14).text(`Data de nascimento: ${alunos.data_nascimento}`, { lineGap: 10 });
     doc.fontSize(14).text(`Periodo em que estuda: ${alunos.periodoEstudo}`, { lineGap: 10 });
-    doc.fontSize(14).text(`Observação: ${alunos.observacao}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Turma: ${alunos.turma.nome}`, { lineGap: 10 });
+    doc.fontSize(14).text(`Observação: ${alunos.observacao == "" ? "Não informado" : alunos.observacao}`, { lineGap: 10 });
     doc.fontSize(18).moveDown().text(`Dados do responsável`, { lineGap: 10 });
     doc.fontSize(14).text(`Nome: ${alunos.responsavel.nome}`, { lineGap: 10 });
     doc.fontSize(14).text(`Telefone: ${alunos.responsavel.telefone}`, { lineGap: 10 });
