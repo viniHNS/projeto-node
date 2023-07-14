@@ -39,8 +39,14 @@ const alunoSchema = new Schema({
     },
 
     turma: {
-        type: Schema.Types.ObjectId,
-        ref: 'Turma',
+        id: {
+            type: Schema.Types.ObjectId,
+            ref: 'Turma'
+        },
+        nome: {
+            type: String,
+            required: true,
+        },
     },
 
     ativo: {
