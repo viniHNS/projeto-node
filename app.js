@@ -123,7 +123,7 @@ app.get('/home', checkToken, async (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('login', { layout: 'login' });
+  res.render('login/login', { layout: 'login' });
 });
 
 app.post('/login', async (req, res) => {
@@ -169,7 +169,7 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render('register', { layout: 'login' });
+  res.render('login/register', { layout: 'login' });
 });
 
 app.post('/register', async (req, res) => {
