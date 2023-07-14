@@ -1,0 +1,34 @@
+<div class="container">
+    <form action="" method="post">
+        <h3 style="text-align: center; font-weight: bold; margin-top: 24px;">Cadastrar Turma</h3>
+        <hr>
+        <h4 style="text-align: center; font-weight: bold;">Dados da turma</h4>
+
+        <div class="input-nome">
+            <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
+            <input type="text" name="nome" id="nome" placeholder="Ex.: 1° Ano, 2° Ano, etc ">
+        </div>
+
+        <div class="input-periodo">
+            <label id="label-periodo" for="periodo_turma">Período<span style="color: red;">*</span></label>
+            <select name="periodo_turma" id="periodo_turma">
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+                <option value="Noite">Noite</option>
+            </select>
+        </div>
+
+        <div class="input-ativo">
+            <label for="ativo">Ativo</label>
+            <input type="checkbox" name="ativo" id="ativo" checked>
+        </div>
+
+        <div class="input-submit">
+            <input type="submit" value="Cadastrar">
+        </div>
+    </form>
+</div>
+
+{{#if error}}
+    <script src="public/js/scriptCadastroTurma.js"></script>
+{{/if}}

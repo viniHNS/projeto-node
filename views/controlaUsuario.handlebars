@@ -17,7 +17,7 @@
                     <a href="#" class="btn btn-primary">Editar</a>
                     <form class="form-consulta" action="/deletarUsuario/{{this._id}}" method="post">
                         <input type="hidden" name="_method" value="delete">
-                        <button type="submit" class="btn btn-danger">Deletar</button>
+                        <button id="btn-deletar" type="submit" class="btn btn-danger">Deletar</button>
                     </form>
                 </div>
             {{/each}}
@@ -25,5 +25,6 @@
         </div>
     </div>
 </div>
+<script src="public/js/scriptAdmin.js"></script>
 
 
