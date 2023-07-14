@@ -223,11 +223,7 @@ app.get('/ajuda', checkToken, async (req, res) => {
     let tipoUsuario = user.tipoUsuario;
 
     if (tipoUsuario == 'administrador') {
-      res.render('ajuda/ajuda', { layout: 'admin' });
-    }
-
-    if (tipoUsuario != 'administrador') {
-      res.render('ajuda/ajuda', { layout: 'main' });
+      res.render('ajuda/ajuda', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
     }
 
   } catch (error) {
@@ -243,11 +239,7 @@ app.get('/ajuda/ajudaCadastroAluno', checkToken, async (req, res) => {
     let tipoUsuario = user.tipoUsuario;
     
     if (tipoUsuario == 'administrador') {
-      res.render('ajuda/ajudaCadastroAluno', { layout: 'admin' });
-    }
-
-    if (tipoUsuario != 'administrador') {
-      res.render('ajuda/ajudaCadastroAluno', { layout: 'main' });
+      res.render('ajuda/ajudaCadastroAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
     }
 
   } catch (error) {
@@ -263,11 +255,7 @@ app.get('/ajuda/ajudaConsultaAluno', checkToken, async (req, res) => {
     let tipoUsuario = user.tipoUsuario;
 
     if (tipoUsuario == 'administrador') {
-      res.render('ajuda/ajudaConsultaAluno', { layout: 'admin' });
-    }
-
-    if (tipoUsuario != 'administrador') {
-      res.render('ajuda/ajudaConsultaAluno', { layout: 'main' });
+      res.render('ajuda/ajudaConsultaAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main'});
     }
 
   } catch (error) {
@@ -283,11 +271,7 @@ app.get('/ajuda/ajudaAulas', checkToken, async (req, res) => {
     let tipoUsuario = user.tipoUsuario;
 
     if (tipoUsuario == 'administrador') {
-      res.render('ajuda/ajudaAulas', { layout: 'admin' });
-    }
-
-    if (tipoUsuario != 'administrador') {
-      res.render('ajuda/ajudaAulas', { layout: 'main' });
+      res.render('ajuda/ajudaAulas', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
     }
 
   } catch (error) {
@@ -358,12 +342,9 @@ app.get('/listarAluno/:id', checkToken, async (req, res) => {
     let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('./listar/listarAluno', { layout: 'admin', alunos, dataEdicao, observacao });
+      res.render('./listar/listarAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', alunos, dataEdicao, observacao });
     }
 
-    if (tipoUsuario != 'administrador') {
-      res.render('./listar/listarAluno', { layout: 'main', alunos, dataEdicao, observacao },);
-    }
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -378,11 +359,7 @@ app.get('/cadastroAluno', checkToken, async (req, res) => {
     let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('cadastroAluno', { layout: 'admin' });
-    }
-
-    if (tipoUsuario != 'administrador') {
-      res.render('cadastroAluno', { layout: 'main' },);
+      res.render('cadastroAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
     }
 
   } catch (error) {
@@ -439,12 +416,9 @@ app.get('/consultaAluno', checkToken, async (req, res) => {
     let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('./consulta/consultaAluno', { layout: 'admin', alunos: alunos });
+      res.render('./consulta/consultaAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', alunos: alunos });
     }
 
-    if (tipoUsuario != 'administrador') {
-      res.render('./consulta/consultaAluno', { layout: 'main', alunos: alunos },);
-    }
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -463,12 +437,9 @@ app.get('/editarAluno/:id', checkToken, async (req, res) => {
     let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('./editar/editarAluno', { layout: 'admin', aluno: alunoEdit, observacao });
+      res.render('./editar/editarAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', aluno: alunoEdit, observacao });
     }
 
-    if (tipoUsuario != 'administrador') {
-      res.render('./editar/editarAluno', { layout: 'main', aluno: alunoEdit, observacao });
-    }
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -544,15 +515,8 @@ app.get('/perfil', checkToken, async (req, res) => {
     let usuario = require('./models/User.js');
     usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
 
-
-    if (tipoUsuario == 'administrador') {
-      res.render('meuPerfil', { layout: 'admin', usuario: usuario });
-    }
-
-    if (tipoUsuario != 'administrador') {
-      res.render('meuPerfil', { layout: 'main', usuario: usuario });
-    }
-
+    res.render('meuPerfil', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', usuario: usuario });
+    
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -579,14 +543,8 @@ app.get('/cadastroTurma', checkToken, async (req, res) => {
     let tipoUsuario = user.tipoUsuario;
     let nome = user.nome;
 
-    if (tipoUsuario == 'administrador') {
-      res.render('cadastroTurma', { layout: 'admin' });
-    }
-
-    if (tipoUsuario != 'administrador') {
-      res.render('cadastroTurma', { layout: 'main' });
-    }
-
+    res.render('cadastroTurma', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
+    
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -631,7 +589,6 @@ app.post('/cadastroTurma', checkToken, async (req, res) => {
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 })
-
 
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
