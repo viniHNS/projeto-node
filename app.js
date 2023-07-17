@@ -13,14 +13,30 @@ const cookieParser = require('cookie-parser');
 const app = express();
 
 //rotas
+const homeRoute = require('./routes/home');
+
 const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
-const homeRoute = require('./routes/home');
+
 const ajudaRoute = require('./routes/ajuda');
+
 const relatorioRoute = require('./routes/relatorio');
 const cadastroAlunoRoute = require('./routes/cadastros/aluno');
 const consultaAlunoRoute = require('./routes/consultas/aluno');
 const editarAlunoRoute = require('./routes/edicoes/aluno');
+const deletaAlunoRoute = require('./routes/deletes/aluno');
+const listaAlunoEspecificoRoute = require('./routes/listagemEspecifica/aluno');
+
+const perfilRoute = require('./routes/perfil');
+
+const consultaUsuarioRoute = require('./routes/consultas/usuario');
+const deletaUsuarioRoute = require('./routes/deletes/usuario');
+
+const cadastroTurmaRoute = require('./routes/cadastros/turma');
+const consultaTurmaRoute = require('./routes/consultas/turma');
+const listaTurmaEspecificaRoute = require('./routes/listagemEspecifica/turma');
+const editarTurmaRoute = require('./routes/edicoes/turma');
+const deletaTurmaRoute = require('./routes/deletes/turma');
 
 require("dotenv").config();
 const handlebars = require('handlebars');
@@ -62,7 +78,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-conn(); //faz a conexão com o banco de dados
+//conn(); 
 
 function checkToken(req, res, next) {
   const token = req.cookies['auth-token'];
@@ -103,267 +119,74 @@ async function isAdmin(req, res, next) {
   }
 }
 
-app.get('/', loginRoute );
-
+//rotas da homepage
 app.get('/home', checkToken, homeRoute);
+app.get('/', checkToken, homeRoute);
+//***************************************************************************************
 
+
+//Rotas de login, logout e registro
 app.get('/login', loginRoute);
-
 app.post('/login', loginRoute);
-
 app.post('/logout', loginRoute);
-
 app.get('/register', registerRoute);
-
 app.post('/register', registerRoute);
+//***************************************************************************************
 
+
+//rotas de ajuda
 app.get('/ajuda', checkToken, ajudaRoute);
-
 app.get('/ajuda/ajudaCadastroAluno', checkToken, ajudaRoute);
-
 app.get('/ajuda/ajudaConsultaAluno', checkToken, ajudaRoute);
-
 app.get('/ajuda/ajudaAulas', checkToken, ajudaRoute);
+//***************************************************************************************
 
-app.post('/relatorio/aluno/:id', checkToken, relatorioRoute);
 
-app.post('/deletarAluno/:id', checkToken, async (req, res) => {
-  const aluno = require('./models/Aluno.js');
-  let id = req.params.id;
-  try {
-    await aluno.findByIdAndDelete(id);
-    res.redirect('/consultaAluno');
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
-
-app.get('/listarAluno/:id', checkToken, async (req, res) => {
-  const aluno = require('./models/Aluno.js');
-  let id = req.params.id;
-  let dataEdicao = await aluno.findById(id).select('updatedAt').lean();
-  let alunoData = await aluno.findById(id).select('observacao').lean();
-  let observacao = alunoData.observacao ? alunoData.observacao.trim() : '';
-
-  dataEdicao = dataEdicao.updatedAt.toLocaleString('pt-BR');
-  try {
-    let alunos = await aluno.findById(id).lean();
-    const user = await User.findById(req.userId).lean();
-
-    let tipoUsuario = user.tipoUsuario;
-    let nome = user.nome;
-
-    if (tipoUsuario == 'administrador') {
-      res.render('./listar/listarAluno', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', alunos, dataEdicao, observacao });
-    }
-
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
-
+//Rotas referente aos alunos
 app.get('/cadastroAluno', checkToken, cadastroAlunoRoute);
-
 app.post('/cadastroAluno', checkToken, cadastroAlunoRoute);
 
 app.get('/consultaAluno', checkToken, consultaAlunoRoute);
 
 app.get('/editarAluno/:id', checkToken, editarAlunoRoute);
-
 app.post('/editarAluno/:id', checkToken, editarAlunoRoute);
 
-app.get('/controlaUsuario', checkToken, isAdmin, async (req, res) => {
+app.get('/listarAluno/:id', checkToken, listaAlunoEspecificoRoute);
 
-  const usuario = require('./models/User.js');
-  const usuarioAtualID = req.userId;
-  try {
+app.post('/relatorio/aluno/:id', checkToken, relatorioRoute);
 
-    let usuarios = await usuario.find({ _id: { $ne: usuarioAtualID } })
-      .select('-senha -__v -createdAt -updatedAt')
-      .lean();
-    res.render('controlaUsuario', { layout: 'admin', usuarios: usuarios })
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
+app.post('/deletarAluno/:id', checkToken, deletaAlunoRoute);
+//***************************************************************************************
 
-app.get('/perfil', checkToken, async (req, res) => {
 
-  try {
-    const user = await User.findById(req.userId).lean();
+//Rotas sobre o perfil do usuário logado
+app.get('/perfil', checkToken, perfilRoute);
+//***************************************************************************************
 
-    let tipoUsuario = user.tipoUsuario;
 
-    let usuario = require('./models/User.js');
-    usuario = await usuario.findById(req.userId).select('-senha -__v -createdAt -updatedAt').lean();
+//Rotas do administrador
+app.get('/controlaUsuario', checkToken, isAdmin, consultaUsuarioRoute);
 
-    res.render('meuPerfil', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', usuario: usuario });
-    
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
+app.post('/deletarUsuario/:id', checkToken, isAdmin, deletaUsuarioRoute);
 
-});
+//Rotas de cadastro, consulta, edição e exclusão da turma
+app.get('/cadastroTurma', checkToken, isAdmin, cadastroTurmaRoute);
+app.post('/cadastroTurma', checkToken, isAdmin, cadastroTurmaRoute);
 
-app.post('/deletarUsuario/:id', checkToken, isAdmin, async (req, res) => {
-  const usuario = require('./models/User.js');
-  let id = req.params.id;
-  try {
-    await usuario.findByIdAndDelete(id);
-    res.redirect('/controlaUsuario');
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
+app.get('/consultaTurma', checkToken, isAdmin, consultaTurmaRoute);
 
-app.get('/cadastroTurma', checkToken, isAdmin, async (req, res) => {
-  try {
-    const user = await User.findById(req.userId).lean();
+app.get('/listarTurma/:id', checkToken, isAdmin, listaTurmaEspecificaRoute);
 
-    let tipoUsuario = user.tipoUsuario;
-    let nome = user.nome;
+app.get('/editarTurma/:id', checkToken, isAdmin, editarTurmaRoute);
+app.post('/editarTurma/:id', checkToken, isAdmin, editarTurmaRoute);
 
-    res.render('cadastroTurma', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
-    
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-})
+app.post('/deletarTurma/:id', checkToken, isAdmin, deletaTurmaRoute);
 
-app.post('/cadastroTurma', checkToken, isAdmin, async (req, res) => {
-  const turma = require('./models/Turma.js');
-  const user = await User.findById(req.userId).lean();
-  let tipoUsuario = user.tipoUsuario;
-  
-  let nome = req.body.nome;
-  let periodo = req.body.periodo_turma
-  let ativo = req.body.ativo
-  if (ativo == 'on') {
-    ativo = true;
-  } else {
-    ativo = false;
-  }
+//*************************************************************************************
 
-  try {
-    
-    const turmaExistente = await turma.findOne({ nome: nome, periodo: periodo }).lean();
+//***************************************************************************************
 
-    if (turmaExistente) {
-      console.error('Já existe uma turma com o mesmo nome e período');
-      return res.render('cadastroTurma', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', error: 'Já existe uma turma com o mesmo nome e período' });
-    }
-
-    await turma.create({ nome: nome, periodo: periodo, ativo: ativo });
-    console.log('Dados da Turma inseridos com sucesso');
-
-    if (tipoUsuario == 'administrador') {
-      res.render('cadastroTurma', { layout: 'admin' });
-    }
-    if (tipoUsuario != 'administrador') {
-      res.render('cadastroTurma', { layout: 'main' });
-    }
-
-  } catch (error) {
-    console.error('Erro ao inserir dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-})
-
-app.get('/consultaTurma', checkToken, isAdmin, async (req, res) => {
-  const turma = require('./models/Turma.js');
-  const aluno = require('./models/Aluno.js');
-
-  try {
-    let turmas = await turma.find().sort({periodo: 1}).lean();
-
-    for (let i = 0; i < turmas.length; i++) {
-      let turmaId = turmas[i]._id;
-
-      let quantidadeAlunos = await aluno.countDocuments({ 'turma.id': turmaId });
-
-      turmas[i].quantidadeAlunos = quantidadeAlunos;
-    }
-
-    res.render('consulta/consultaTurma', { layout: 'admin', turmas: turmas });
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
-
-app.get('/listarTurma/:id', checkToken, isAdmin, async (req, res) => {
-  const turma = require('./models/Turma.js');
-  const aluno = require('./models/Aluno.js');
-
-  let id = req.params.id;
-  try {
-    let turmas = await turma.findById(id).lean();
-    let alunos = await aluno.find({ 'turma.id': id }).lean();
-    res.render('listar/listarTurma', { layout: 'admin', turmas: turmas,  alunos: alunos });
-  } catch (error) {
-    console.error('Erro ao buscar dados da turma: ', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
-
-app.get('/editarTurma/:id', checkToken, isAdmin, async (req, res) => {
-  const turma = require('./models/Turma.js');
-  let id = req.params.id;
-
-  try {
-    let turmas = await turma.findById(id).lean();
-
-    res.render('editar/editarTurma', { layout: 'admin', turmas: turmas});
-  } catch (error) {
-    console.error('Erro ao buscar dados da turma: ', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
-
-app.post('/editarTurma/:id', checkToken, isAdmin, async (req, res) => {
-  const turma = require('./models/Turma.js');
-  let id = req.params.id;
-
-  let nome = req.body.nome;
-  let periodo = req.body.periodo_turma
-  let ativo = req.body.ativo
-  if (ativo == 'on') {
-    ativo = true;
-  } else {
-    ativo = false;
-  }
-
-  try {
-    await turma.findByIdAndUpdate(id, { nome: nome, periodo: periodo, ativo: ativo });
-    console.log('Dados da Turma atualizados com sucesso')
-    res.redirect('/consultaTurma');
-  } catch (error) {
-    console.error('Erro ao buscar dados da turma: ', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
-
-app.post('/deletarTurma/:id', checkToken, isAdmin, async (req, res) => {
-  const turma = require('./models/Turma.js');
-  let id = req.params.id;
-
-  try {
-    await turma.findByIdAndDelete(id);
-    console.log('Turma deletada com sucesso')
-    res.redirect('/consultaTurma');
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    res.status(500).redirect('https://http.cat/images/500.jpg');
-  }
-});
-
-app.get('/editarAluno/:id', checkToken, isAdmin, async (req, res) => {
+/*app.get('/editarAluno/:id', checkToken, isAdmin, async (req, res) => {
   const aluno = require('./models/Aluno.js');
   const turma = require('./models/Turma.js');
   let id = req.params.id;
@@ -377,7 +200,7 @@ app.get('/editarAluno/:id', checkToken, isAdmin, async (req, res) => {
     console.error('Erro ao buscar dados do aluno: ', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
-});
+}); */
 
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando na porta ${process.env.PORT}`.rainbow.bold.underline);
