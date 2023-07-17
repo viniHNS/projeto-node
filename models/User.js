@@ -26,6 +26,11 @@ const UserSchema = new mongoose.Schema({
         ref: 'Turma' 
     }],
 
+    ativo: {
+        type: Boolean,
+        default: true,
+    },
+
 
 }, { timestamps: true });
 
