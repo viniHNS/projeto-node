@@ -1,7 +1,8 @@
-# Projeto Node.js Express
+# Projeto Escola Node.js Express
 
 Este repositório contém um projeto Node.js Express que utiliza várias bibliotecas e tecnologias para criar um aplicativo web. O objetivo principal deste projeto é realizar o cadastro de alunos e seus responsáveis em uma plataforma unificada, também é possivel realizar o controle de usuários cadastrados através de um painél administrativo.<br>
-*(Por enquanto, o site está otimizado para **Desktop**. Mobile algumas páginas estão de dificil preenchimento/consulta)*
+*(Por enquanto, o site está otimizado para **Desktop**. Mobile algumas páginas estão de dificil preenchimento/consulta)* <br>
+*(Também só é possivel cadastrar dois tipos de usuário: administrador[este deve ser **inserido manualmente no BD**] e o outro é o comum, que é o professor)*
 
 ## Tecnologias utilizadas
 
