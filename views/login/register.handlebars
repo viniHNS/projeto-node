@@ -28,3 +28,45 @@
         </form>
     </div>
 </div>
+
+<script>
+    {{#if errorNomeVazio}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorNomeVazio}}',
+        })
+    {{/if}}
+
+    {{#if errorEmailVazio}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorEmailVazio}}',
+        })
+    {{/if}}
+
+    {{#if errorPassVazio}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorPassVazio}}',
+        })
+    {{/if}}
+
+    {{#if errorPassDiferente}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorPassDiferente}}',
+        })
+    {{/if}}
+
+    {{#if errorUserExists}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorUserExists}}',
+        })
+    {{/if}}
+</script>
