@@ -20,6 +20,14 @@
 </div>
 
 <script>
+    {{#if errorUserInativo}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorUserInativo}}',
+        })
+    {{/if}}
+
     {{#if errorEmailPassVazia}}
         Swal.fire({
             icon: 'error',

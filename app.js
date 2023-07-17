@@ -31,6 +31,7 @@ const perfilRoute = require('./routes/perfil');
 
 const consultaUsuarioRoute = require('./routes/consultas/usuario');
 const deletaUsuarioRoute = require('./routes/deletes/usuario');
+const editarUsuarioRoute = require('./routes/edicoes/usuario');
 
 const cadastroTurmaRoute = require('./routes/cadastros/turma');
 const consultaTurmaRoute = require('./routes/consultas/turma');
@@ -168,6 +169,9 @@ app.get('/perfil', checkToken, perfilRoute);
 app.get('/controlaUsuario', checkToken, isAdmin, consultaUsuarioRoute);
 
 app.post('/deletarUsuario/:id', checkToken, isAdmin, deletaUsuarioRoute);
+
+app.get('/editarUsuario/:id', checkToken, isAdmin, editarUsuarioRoute);
+app.post('/editarUsuario/:id', checkToken, isAdmin, editarUsuarioRoute);
 
 //Rotas de cadastro, consulta, edição e exclusão da turma
 app.get('/cadastroTurma', checkToken, isAdmin, cadastroTurmaRoute);

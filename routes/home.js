@@ -26,11 +26,11 @@ router.get('/home', async (req, res) => {
     let nome = user.nome;
 
     if (tipoUsuario == 'administrador') {
-      res.render('home', { nome, layout: 'admin', allAlunos, isAniversario });
+      res.render('home', { nome, layout: 'admin', allAlunos, isAniversario, tipoUsuario });
     }
 
     if (tipoUsuario != 'administrador') {
-      res.render('home', { nome, layout: 'main', isAniversario });
+      res.render('home', { nome, layout: 'main', isAniversario, tipoUsuario });
     }
 
   } catch (error) {
