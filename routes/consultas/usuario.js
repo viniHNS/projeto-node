@@ -16,6 +16,7 @@ router.get('/controlaUsuario', async (req, res) => {
     let usuarios = await usuario.find({ _id: { $ne: usuarioAtualID } })
       .select('-senha -__v -createdAt -updatedAt')
       .lean();
+ 
     res.render('controlaUsuario', { layout: 'admin', usuarios: usuarios })
   } catch (error) {
     console.error('Erro ao buscar dados:', error);

@@ -21,10 +21,15 @@ const UserSchema = new mongoose.Schema({
         type: String,
     },
 
-    turmasPermitidas: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Turma' 
-    }],
+    turmasPermitidas: [
+        {
+            id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Turma'
+            },
+            
+        }
+    ],
 
     ativo: {
         type: Boolean,

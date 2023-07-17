@@ -18,10 +18,32 @@
       <input type="password" name="senha" id="senha">
     </div>
 
+    <div class="input-ativo">
+      <label for="ativo" id="label-ativo">Ativo<span style="color: red;">*</span></label>
+      <input type="checkbox" name="ativo" id="ativo" {{#if dados.ativo}}checked{{/if}}>
+    </div>
+
+    <hr>
+
+    <h3 class="text-center">Turmas habilitadas</h3>
+    <div class="row">
+      {{#each dadosTurma}}
+      
+      <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+        <input type="checkbox" name="turma-{{this._id}}" id="turma-{{this._id}}" value="{{this.nome}} - {{this.periodo}}" {{#ifCond this._id '==' turmasPermitidas.id}}checked{{/ifCond}}>
+        <p>{{this.nome}} - {{this.periodo}}</p>
+      </div>  
+     
+      {{/each}}
+    </div>
+
+
     <div class="input-submit">
       <input type="submit" value="Alterar">
       <a href="/controlaUsuario" class="btn btn-secondary">Voltar</a>
     </div>
+
+    
     
   </form>
 
