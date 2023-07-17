@@ -18,26 +18,30 @@ router.get('/register', (req, res) => {
 router.post('/register', async (req, res) => {
   const { nome, email, password, password2, dataNascimento } = req.body;
 
+  if(dataNascimento == '' || dataNascimento == null || dataNascimento == undefined) {
+    dataNascimento = "Não informado"
+  }
+
   if (!nome) {
-    return res.status(422).send('<script>alert("Nome não informado"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/register', { layout: 'login', errorNomeVazio: 'Nome não informado'});
   }
 
   if (!email) {
-    return res.status(422).send('<script>alert("Email não informado"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/register', { layout: 'login', errorEmailVazio: 'Email não informado'});
   }
 
   if (!password) {
-    return res.status(422).send('<script>alert("Senha não informada"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/register', { layout: 'login', errorPassVazio: 'Senha não informada'});
   }
 
   if (password !== password2) {
-    return res.status(422).send('<script>alert("Senhas não conferem"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/register', { layout: 'login', errorPassDiferente: 'Senhas não conferem'});
   }
 
   const userExists = await User.findOne({ email: email });
 
   if (userExists) {
-    return res.status(422).send('<script>alert("Email já cadastrado"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/register', { layout: 'login', errorUserExists: 'Usuário já cadastrado'});
   }
 
   const salt = await bcrypt.genSalt(12);
