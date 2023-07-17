@@ -16,11 +16,8 @@ router.get('/editarAluno/:id', async (req, res) => {
     let observacao = alunoEdit.observacao ? alunoEdit.observacao.trim() : '';
     const user = await User.findById(req.userId).lean();
 
-    let tipoUsuario = user.tipoUsuario;
-
-    if (tipoUsuario == 'administrador') {
-      res.render('./editar/editarAluno', { layout: user.tipoUsuario === 'administrador' ? 'admin' : 'main', aluno: alunoEdit, observacao, turmas});
-    }
+    res.render('editar/editarAluno', { layout: user.tipoUsuario === 'administrador' ? 'admin' : 'main', aluno: alunoEdit, observacao, turmas});
+    
 
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
