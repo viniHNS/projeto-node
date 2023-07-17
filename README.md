@@ -98,7 +98,7 @@ Se você tiver alguma pergunta ou sugestão em relação a este projeto, sinta-s
 Melhorias planejadas para o projeto:
 
 - Melhorar a interface de usuário (UI/UX)
-- Melhorar as rotas e organizar o código
+- ~~Melhorar as rotas e organizar o código~~ **_MAYBE OK_**
 - ~~Adicionar validação de formulários do lado do cliente e do servidor~~ **_OK_**
 - Implementar um sistema de cache para melhorar o desempenho
 - Adicionar testes automatizados para garantir a qualidade do código
