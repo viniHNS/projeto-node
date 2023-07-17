@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser');
 const conn = require('../db/conn');
 const User = require('../models/User');
 
 conn();
+
+router.get('/', async (req, res) => {
+  res.redirect('/home');
+});
 
 router.get('/home', async (req, res) => {
 
