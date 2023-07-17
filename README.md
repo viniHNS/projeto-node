@@ -101,7 +101,6 @@ Melhorias planejadas para o projeto:
 - Melhorar a interface de usuário (UI/UX)
 - ~~Melhorar as rotas e organizar o código~~ **_MAYBE OK_**
 - ~~Adicionar validação de formulários do lado do cliente e do servidor~~ **_OK_**
-- Adicionar testes automatizados para garantir a qualidade do código
 - ~~Melhorar a segurança da aplicação (por exemplo, adicionando proteção contra ataques de injeção de SQL ou XSS)~~ **_MAYBE OK_**
 - Adicionar recursos de notificação por e-mail
 - Implementar um sistema de busca avançada
