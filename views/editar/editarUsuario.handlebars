@@ -1,16 +1,16 @@
 <div class="container">
-  <form action="/editarUsuario/{{_id}}" method="post">
+  <form action="/editarUsuario/{{dados._id}}" method="post">
     <h3 style="text-align: center; font-weight: bold;">Dados do usuário</h3>
     <hr>
 
     <div class="input-nome">
       <label for="nome" id="label-nome">Nome<span style="color: red;">*</span></label>
-      <input type="text" name="nome" id="nome" value="{{nome}}">
+      <input type="text" name="nome" id="nome" value="{{dados.nome}}">
     </div>
 
     <div class="input-email">
       <label for="email" id="label-email">E-mail<span style="color: red;">*</span></label>
-      <input type="email" name="email" id="email" value="{{email}}">
+      <input type="email" name="email" id="email" value="{{dados.email}}">
     </div>
 
     <div class="input-senha">
@@ -20,7 +20,9 @@
 
     <div class="input-submit">
       <input type="submit" value="Alterar">
+      <a href="/controlaUsuario" class="btn btn-secondary">Voltar</a>
     </div>
+    
   </form>
 
   </div>

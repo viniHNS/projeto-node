@@ -14,7 +14,7 @@
                     <p><strong>Tipo Usuario:</strong> {{tipoUsuario}}</p>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Editar</a>
+                    <a href="/editarUsuario/{{this._id}}" class="btn btn-primary">Alterar Dados</a>
                     <form class="form-consulta" action="/deletarUsuario/{{this._id}}" method="post">
                         <input type="hidden" name="_method" value="delete">
                         <button id="btn-deletar" type="submit" class="btn btn-danger">Deletar</button>
