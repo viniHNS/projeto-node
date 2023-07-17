@@ -23,27 +23,27 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(422).send('<script>alert("Informe o email e a senha"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/login', { layout: 'login', errorEmailPassVazia: 'Preencha os campos de email e Senha' });
   }
 
   if (!email) {
-    return res.status(422).send('<script>alert("Email não informado"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/login', { layout: 'login', errorEmailVazia: 'Email não informado' });
   }
 
   if (!password) {
-    return res.status(422).send('<script>alert("Senha não informada"); window.location.href = "/login";</script>');
+    return res.status(422).render('login/login', { layout: 'login', errorPassVazia: 'Senha não informada' });
   }
 
   const user = await User.findOne({ email: email });
 
   if (!user) {
-    return res.status(404).send('<script>alert("Email não encontrado"); window.location.href = "/login";</script>');
+    return res.status(404).render('login/login', { layout: 'login', errorUser: 'Usuário não encontrado'});
   }
 
   const checkPassword = await bcrypt.compare(password, user.senha);
 
   if (!checkPassword) {
-    return res.status(404).send('<script>alert("Senha incorreta"); window.location.href = "/login";</script>');
+    return res.status(404).render('login/login', { layout: 'login', errorPassErrada: 'Senha incorreta'});
   }
 
   try {
