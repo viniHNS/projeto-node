@@ -159,7 +159,10 @@ app.post('/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, secret);
 
-    res.cookie('auth-token', token, { httpOnly: true, expires: new Date(Date.now() + 1800000) });
+    const expirationTime = 20 * 60 * 60 * 1000; // 20 horas em milissegundos
+    const expires = new Date(Date.now() + expirationTime);
+
+    res.cookie('auth-token', token, { httpOnly: true, expires: expires});
     res.redirect('/home');
 
   } catch (error) {
