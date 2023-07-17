@@ -46,6 +46,10 @@ router.post('/login', async (req, res) => {
     return res.status(404).render('login/login', { layout: 'login', errorPassErrada: 'Senha incorreta'});
   }
 
+  if(user.ativo == false) {
+    return res.status(404).render('login/login', { layout: 'login', errorUserInativo: 'Usuário desativado, entre em contato com o administrador'});
+  }
+
   try {
     const secret = process.env.SECRET;
 
