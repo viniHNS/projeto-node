@@ -27,10 +27,10 @@
 
     <h3 class="text-center">Turmas habilitadas</h3>
     <div class="row">
-      {{#each dadosTurma}}
+      {{#each turmas}}
       
       <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
-        <input type="checkbox" name="turma-{{this._id}}" id="turma-{{this._id}}" value="{{this.nome}} - {{this.periodo}}" {{#ifCond this._id '==' turmasPermitidas.id}}checked{{/ifCond}}>
+        <input type="checkbox" name="turma-{{this._id}}" id="turma-{{this._id}}" value="{{this.nome}} - {{this.periodo}}">
         <p>{{this.nome}} - {{this.periodo}}</p>
       </div>  
      

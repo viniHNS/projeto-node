@@ -42,6 +42,13 @@ const deletaTurmaRoute = require('./routes/deletes/turma');
 require("dotenv").config();
 const handlebars = require('handlebars');
 
+handlebars.registerHelper('isInTurmasPermitidas', function (turmaId, turmasPermitidas, options) {
+  if (turmasPermitidas && turmasPermitidas.includes(turmaId.toString())) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
 handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
   switch (operator) {
     case '==':

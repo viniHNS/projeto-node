@@ -29,6 +29,18 @@
           {{/each}}
         </ul>
 
+        <hr>
+        <h3 style="text-align: center; font-weight: bold;" class="mb-3">Professores vinculados</h3>
+        {{#if turmas.professoresVinculados}}
+        <ul>
+            {{#each turmas.professoresVinculados}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+        {{else}}
+            <p>Nenhum professor vinculado a esta turma.</p>
+        {{/if}}
+
 
         <div class="input-submit">
             <input type="submit" value="Voltar">
