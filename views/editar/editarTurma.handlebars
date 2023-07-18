@@ -22,6 +22,19 @@
             <input type="checkbox" name="ativo" id="ativo" {{#if turmas.ativo}} checked {{else}} {{/if}}>
         </div>
 
+        <hr>
+
+        <h3 class="text-center popover-toggle popover-dismiss" data-toggle="popover" data-placement="top" data-content="Para selecionar vários professores, clique segurando Ctrl">Professores Permitidos</h3>
+
+        <div class="form-group">
+            <label for="professores">Professores</label>
+            <select class="form-control" name="professores" id="professores" multiple>
+                {{#each dadosProf}}
+                    <option value="{{_id}}">{{nome}}</option>
+                {{/each}}
+            </select>
+        </div>
+
         <div class="input-submit">
             <input type="submit" value="Alterar">
         </div>

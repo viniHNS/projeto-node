@@ -12,6 +12,13 @@ const turmaSchema = new Schema({
         required: true,
     },
 
+    professoresVinculados: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Professor',
+        },
+      ],
+
     ativo: {
         type: Boolean,
         default: true,
