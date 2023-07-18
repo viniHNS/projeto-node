@@ -1,0 +1,71 @@
+<div class="container vh-100 d-flex align-items-center">
+    <div class="row mt-5 mx-auto justify-content-center">
+        <h3 class="text-center mb-4 title">Login</h3>
+        <form action="/login" method="post" class="p-4">
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="text" name="email" placeholder="Email" class="form-control" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" name="password" placeholder="Sua senha" class="form-control" id="password"
+                    required>
+            </div>
+            <div class="form-group">
+                <input type="submit" name="submit" value="Login" class="btn btn-primary">
+            </div>
+            <a class="text-center" href="/register">Quero me registrar</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    {{#if errorUserInativo}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorUserInativo}}',
+        })
+    {{/if}}
+
+    {{#if errorEmailPassVazia}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorEmailPassVazia}}',
+        })
+    {{/if}}
+
+    {{#if errorEmailVazia}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorEmailVazia}}',
+        })
+    {{/if}}
+
+    {{#if errorPassVazia}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorPassVazia}}',
+        })
+    {{/if}}
+
+    {{#if errorUser}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorUser}}',
+        })
+    {{/if}}
+
+    {{#if errorPassErrada}}
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{errorPassErrada}}',
+        })
+    {{/if}}
+
+</script>

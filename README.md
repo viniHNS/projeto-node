@@ -1,6 +1,8 @@
-# Projeto Node.js Express
+# Projeto Escola Node.js Express
 
-Este repositório contém um projeto Node.js Express que utiliza várias bibliotecas e tecnologias para criar um aplicativo web. O objetivo principal deste projeto é realizar o cadastro de alunos e seus responsáveis em uma plataforma unificada, também é possivel realizar o controle de usuários cadastrados através de um painél administrativo.
+Este repositório contém um projeto Node.js Express que utiliza várias bibliotecas e tecnologias para criar um aplicativo web. O objetivo principal deste projeto é realizar o cadastro de alunos e seus responsáveis em uma plataforma unificada, também é possivel realizar o controle de usuários cadastrados através de um painél administrativo.<br>
+*(Por enquanto, o site está otimizado para **Desktop**. Mobile algumas páginas estão de dificil preenchimento/consulta)* <br>
+*(Também só é possivel cadastrar dois tipos de usuário: administrador[este deve ser **inserido manualmente no BD**] e o outro é o comum, que é o professor)*
 
 ## Tecnologias utilizadas
 
@@ -23,6 +25,7 @@ Este repositório contém um projeto Node.js Express que utiliza várias bibliot
 - SweetAlert2
 - Vanilla Masker
 - Typed.js
+- tsParticles
 
 ## Configuração do ambiente
 
@@ -33,11 +36,11 @@ Certifique-se de ter o Node.js e o MongoDB instalados em seu sistema antes de pr
 3. Renomeie o arquivo `.env.example` para `.env`.
 4. Abra o arquivo `.env` e defina as seguintes variáveis de ambiente:
 
-~~~env
+```env
     SECRET=[sua_chave_secreta]
     PORT=[porta_do_servidor]
     CONNECTION_STRING=[sua_string_de_conexão_do_MongoDB]
-~~~
+```
 
 5. Inicie o servidor utilizando o comando: `npm start`.
 
@@ -93,13 +96,11 @@ Se você tiver alguma pergunta ou sugestão em relação a este projeto, sinta-s
 
 ## Checklist -> To-Do
 
- Melhorias planejadas para o projeto:
+Melhorias planejadas para o projeto:
 
 - Melhorar a interface de usuário (UI/UX)
-- Melhorar as rotas e organizar o código
-- ~~Adicionar validação de formulários do lado do cliente e do servidor~~  ***OK***
-- Implementar um sistema de cache para melhorar o desempenho
-- Adicionar testes automatizados para garantir a qualidade do código
-- ~~Melhorar a segurança da aplicação (por exemplo, adicionando proteção contra ataques de injeção de SQL ou XSS)~~ ***MAYBE OK***
+- ~~Melhorar as rotas e organizar o código~~ **_MAYBE OK_**
+- ~~Adicionar validação de formulários do lado do cliente e do servidor~~ **_OK_**
+- ~~Melhorar a segurança da aplicação (por exemplo, adicionando proteção contra ataques de injeção de SQL ou XSS)~~ **_MAYBE OK_**
 - Adicionar recursos de notificação por e-mail
 - Implementar um sistema de busca avançada

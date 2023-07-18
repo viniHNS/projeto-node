@@ -30,6 +30,15 @@
         </select>
         </div>
 
+        <div class="input-turma">
+            <label id="label-turma" for="turma">Turma<span style="color: red;">*</span></label>
+            <select name="turma" id="turma">
+                {{#each turmas}}
+                    <option value="{{this.nome}} - {{this.periodo}}" {{#ifCond this._id '==' aluno.turmas._id}}selected{{/ifCond}}>{{this.nome}} - {{this.periodo}}</option>
+                {{/each}}
+            </select>    
+        </div>
+
         <div class="input-observacoes">
             <label for="observacoes">Observações</label>
             <textarea name="observacoes" id="observacoes" cols="30" rows="10">{{#if aluno.observacao}}{{observacao}}{{/if}}

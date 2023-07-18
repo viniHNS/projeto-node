@@ -6,6 +6,7 @@ let isDataNascimentoSet = false;
 let isSexoSet = false;
 let isPeriodoEstudoSet = false;
 let isResponsavelNomeSet = false;
+let isResponsavelEnderecoSet = false;
 
 const masculinoRadioButton = document.querySelector(".radio-sexo-masculino");
 const femininoRadioButton = document.querySelector(".radio-sexo-feminino");
@@ -66,6 +67,16 @@ document.querySelector("input[type='submit']").addEventListener("click", (e) => 
         document.querySelector("#nomeResponsavel").removeAttribute("style");
         document.querySelector("#label-nomeResponsavel").removeAttribute("style");
         isResponsavelNomeSet = true
+    }
+
+    if(document.querySelector("#enderecoResponsavel").value == ""){
+        document.querySelector("#enderecoResponsavel").style.cssText = "border: 1px solid red;" 
+        document.querySelector("#label-enderecoResponsavel").style.cssText = "color:red;" 
+        isResponsavelEnderecoSet = false;
+    } else {
+        document.querySelector("#enderecoResponsavel").removeAttribute("style");
+        document.querySelector("#label-enderecoResponsavel").removeAttribute("style");
+        isResponsavelEnderecoSet = true;
     }
 
     if(!isNomeSet || !isDataNascimentoSet || !isSexoSet || !isPeriodoEstudoSet || !isResponsavelNomeSet){
