@@ -23,12 +23,15 @@
         <hr>
 
         <h3 style="text-align: center; font-weight: bold;" class="mb-3">Alunos nesta Turma</h3>
-        <ul>
-          {{#each alunos}}
-            <li>{{this.nome}}</li>
-          {{/each}}
-        </ul>
-
+        {{#if alunos}} 
+            <ul>
+            {{#each alunos}}
+                <li>{{this.nome}}</li>
+            {{/each}}
+            </ul>
+            {{else}}
+                <p>Nenhum aluno vinculado a esta turma.</p>
+        {{/if}}
         <hr>
         <h3 style="text-align: center; font-weight: bold;" class="mb-3">Professores vinculados</h3>
         {{#if turmas.professoresVinculados}}
