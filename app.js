@@ -39,7 +39,8 @@ const listaTurmaEspecificaRoute = require('./routes/listagemEspecifica/turma');
 const editarTurmaRoute = require('./routes/edicoes/turma');
 const deletaTurmaRoute = require('./routes/deletes/turma');
 
-const consultaTurmaChamadaRoute = require('./routes/consultas/turmaChamada')
+const consultaTurmaChamadaRoute = require('./routes/consultas/turmaChamada');
+const listaTurmaChamadaRoute = require('./routes/listagemEspecifica/turmaChamada');
 
 require("dotenv").config();
 const handlebars = require('handlebars');
@@ -153,6 +154,7 @@ app.get('/ajuda/ajudaAulas', checkToken, ajudaRoute);
 
 //rotas de chamada, etc.
 app.get('/consultaTurmaChamada', checkToken, consultaTurmaChamadaRoute)
+app.get('/listarTurmaChamada/:id', checkToken, listaTurmaChamadaRoute)
 
 
 //*************************************************************************************** 
