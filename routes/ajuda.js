@@ -13,10 +13,8 @@ router.get('/ajuda', async (req, res) => {
 
     let tipoUsuario = user.tipoUsuario;
 
-    if (tipoUsuario == 'administrador') {
-      res.render('ajuda/ajuda', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
-    }
-
+    res.render('ajuda/ajuda', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main' });
+    
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
