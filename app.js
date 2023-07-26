@@ -91,6 +91,7 @@ app.use(cookieParser());
 
 //conn(); 
 
+//middleware para verificar se o usuário está logado
 function checkToken(req, res, next) {
   const token = req.cookies['auth-token'];
 
@@ -108,7 +109,9 @@ function checkToken(req, res, next) {
     return res.status(400).redirect('https://http.cat/images/400.jpg');
   }
 }
+//******************************************************************************************** */
 
+//middleware para verificar se o usuário é administrador
 async function isAdmin(req, res, next) {
   try {
     const user = await User.findById(req.userId).lean();
@@ -129,6 +132,8 @@ async function isAdmin(req, res, next) {
     res.status(500).redirect('https://http.cat/images/500.jpg');
   }
 }
+//******************************************************************************************** */
+
 
 //rotas da homepage
 app.get('/home', checkToken, homeRoute);
@@ -155,10 +160,7 @@ app.get('/ajuda/ajudaAulas', checkToken, ajudaRoute);
 //rotas de chamada, etc.
 app.get('/consultaTurmaChamada', checkToken, consultaTurmaChamadaRoute)
 app.get('/listaTurmaChamada/:id', checkToken, listaTurmaChamadaRoute)
-
-
 //*************************************************************************************** 
-
 
 
 //Rotas referente aos alunos
