@@ -1,5 +1,5 @@
 <div class="container">
-    <form action="/consultaTurma/" method="get">
+    <form action="/consultaTurmaChamada" method="get">
         <h3 style="text-align: center; font-weight: bold;">Dados da turma</h3>
         <hr>
 
@@ -23,10 +23,10 @@
         <hr>
 
         <h3 style="text-align: center; font-weight: bold;" class="mb-3">Alunos nesta Turma</h3>
-        {{#if alunos}} 
+        {{#if turmas.nomeAlunos}} 
             <ul>
-            {{#each alunos}}
-                <li>{{this.nomeAlunos}}</li>
+            {{#each turmas.nomeAlunos}}
+                <li>{{this}}</li>
             {{/each}}
             </ul>
             {{else}}
