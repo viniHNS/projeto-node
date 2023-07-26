@@ -154,7 +154,7 @@ app.get('/ajuda/ajudaAulas', checkToken, ajudaRoute);
 
 //rotas de chamada, etc.
 app.get('/consultaTurmaChamada', checkToken, consultaTurmaChamadaRoute)
-app.get('/listarTurmaChamada/:id', checkToken, listaTurmaChamadaRoute)
+app.get('/listaTurmaChamada/:id', checkToken, listaTurmaChamadaRoute)
 
 
 //*************************************************************************************** 
