@@ -1,5 +1,5 @@
 <div class="container">
-    <form action="/consultaTurma/" method="get">
+    <form action="/consultaTurmaChamada" method="get">
         <h3 style="text-align: center; font-weight: bold;">Dados da turma</h3>
         <hr>
 
@@ -23,28 +23,16 @@
         <hr>
 
         <h3 style="text-align: center; font-weight: bold;" class="mb-3">Alunos nesta Turma</h3>
-        {{#if alunos}} 
+        {{#if turmas.nomeAlunos}} 
             <ul>
-            {{#each alunos}}
-                <li>{{this.nome}}</li>
+            {{#each turmas.nomeAlunos}}
+                <li>{{this}}</li>
             {{/each}}
             </ul>
             {{else}}
                 <p>Nenhum aluno vinculado a esta turma.</p>
         {{/if}}
-        <hr>
-        <h3 style="text-align: center; font-weight: bold;" class="mb-3">Professores vinculados</h3>
-        {{#if turmas.professoresVinculados}}
-        <ul>
-            {{#each turmas.professoresVinculados}}
-                <li>{{this}}</li>
-            {{/each}}
-        </ul>
-        {{else}}
-            <p>Nenhum professor vinculado a esta turma.</p>
-        {{/if}}
-
-
+       
         <div class="input-submit">
             <input type="submit" value="Voltar">
         </div>
