@@ -15,6 +15,9 @@ router.get('/listarTurma/:id', async (req, res) => {
   try {
     let turmas = await turma.findById(id).lean();
     let alunos = await aluno.find({ 'turma.id': id }).lean();
+    const user = await professor.findById(req.userId).lean();
+
+    let tipoUsuario = user.tipoUsuario;
 
     let professoresVinculadosIds = Array.isArray(turmas.professoresVinculados) ? turmas.professoresVinculados : [turmas.professoresVinculados];
 
@@ -24,7 +27,7 @@ router.get('/listarTurma/:id', async (req, res) => {
 
     turmas.professoresVinculados = nomesProfessores; // Array com os nomes dos professores vinculados
 
-    res.render('listar/listarTurma', { layout: 'admin', turmas: turmas, alunos: alunos });
+    res.render('listar/listarTurma', { layout: tipoUsuario === 'administrador' ? 'admin' : 'main', turmas: turmas, alunos: alunos });
   } catch (error) {
     console.error('Erro ao buscar dados da turma: ', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');

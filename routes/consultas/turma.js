@@ -20,7 +20,7 @@ router.get('/consultaTurma', async (req, res) => {
 
     }
   
-    res.render('consulta/consultaTurma', { layout: 'admin', turmas: turmas });
+    res.render('consulta/consultaTurma', { turmas: turmas });
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');

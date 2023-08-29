@@ -184,7 +184,6 @@ app.post('/deletarAluno/:id', checkToken, deletaAlunoRoute);
 app.get('/perfil', checkToken, perfilRoute);
 //***************************************************************************************
 
-
 //Rotas do administrador
 app.get('/controlaUsuario', checkToken, isAdmin, consultaUsuarioRoute);
 
@@ -192,20 +191,20 @@ app.post('/deletarUsuario/:id', checkToken, isAdmin, deletaUsuarioRoute);
 
 app.get('/editarUsuario/:id', checkToken, isAdmin, editarUsuarioRoute);
 app.post('/editarUsuario/:id', checkToken, isAdmin, editarUsuarioRoute);
+//***************************************************************************************
 
 //Rotas de cadastro, consulta, edição e exclusão da turma
-app.get('/cadastroTurma', checkToken, isAdmin, cadastroTurmaRoute);
-app.post('/cadastroTurma', checkToken, isAdmin, cadastroTurmaRoute);
+app.get('/cadastroTurma', checkToken,  cadastroTurmaRoute);
+app.post('/cadastroTurma', checkToken, cadastroTurmaRoute);
 
-app.get('/consultaTurma', checkToken, isAdmin, consultaTurmaRoute);
+app.get('/consultaTurma', checkToken, consultaTurmaRoute);
 
-app.get('/listarTurma/:id', checkToken, isAdmin, listaTurmaEspecificaRoute);
+app.get('/listarTurma/:id', checkToken, listaTurmaEspecificaRoute);
 
-app.get('/editarTurma/:id', checkToken, isAdmin, editarTurmaRoute);
-app.post('/editarTurma/:id', checkToken, isAdmin, editarTurmaRoute);
+app.get('/editarTurma/:id', checkToken, editarTurmaRoute);
+app.post('/editarTurma/:id', checkToken, editarTurmaRoute);
 
-app.post('/deletarTurma/:id', checkToken, isAdmin, deletaTurmaRoute);
-
+app.post('/deletarTurma/:id', checkToken, deletaTurmaRoute);
 //*************************************************************************************
 
 //***************************************************************************************

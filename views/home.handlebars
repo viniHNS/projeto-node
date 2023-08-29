@@ -73,8 +73,6 @@
         "{{periodoEstudo}}", 
     {{/each}})
 
-
-{{#ifCond tipoUsuario '==' 'administrador' }}
     let somentePeriodoManha = dados.filter((item) => {
         return item == 'Manhã'
     })
@@ -175,5 +173,5 @@
             }
         }
     });
-{{/ifCond}}
+
 </script>

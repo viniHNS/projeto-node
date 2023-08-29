@@ -9,7 +9,7 @@ router.get('/cadastroTurma', async (req, res) => {
   const user = require('../../models/User')
   try {
     const professores = await user.find({ tipoUsuario: { $ne: 'administrador' } }).lean();
-    res.render('cadastroTurma', { layout: 'admin', dadosProf: professores });
+    res.render('cadastroTurma', { dadosProf: professores });
   } catch (error) {
     console.error('Erro ao buscar dados dos professores:', error);
     res.status(500).redirect('https://http.cat/images/500.jpg');
@@ -36,13 +36,13 @@ router.post('/cadastroTurma', async (req, res) => {
 
     if (turmaExistente) {
       console.error('Já existe uma turma com o mesmo nome e período');
-      return res.render('cadastroTurma', { layout:'admin', error: 'Já existe uma turma com o mesmo nome e período' });
+      return res.render('cadastroTurma', {  error: 'Já existe uma turma com o mesmo nome e período' });
     }
 
     await turma.create({ nome: nome, periodo: periodo, ativo: ativo });
     console.log('Dados da Turma inseridos com sucesso');
 
-    res.render('cadastroTurma', { layout: 'admin' });
+    res.render('cadastroTurma');
     
   } catch (error) {
     console.error('Erro ao inserir dados:', error);
